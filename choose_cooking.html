@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cooking Routine Tracker</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #E0FFFF;
+    padding: 20px;
+}
+
+/* LAYOUT */
+.wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.container {
+    flex: 2;
+    max-width: 800px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.sidebar {
+    width: 300px;
+}
+
+.box {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* LINKS */
+a {
+    display: inline-block;
+    margin-top: 5px;
+    color: #1f4e79;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* CHATBOT */
+#chatbox {
+    height: 150px;
+    overflow-y: auto;
+    background: #eef;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+/* ORIGINAL */
+h1 {
+    text-align: center;
+    color: #1f4e79;
+}
+
+.day {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+.completed {
+    background: #d4edda;
+}
+
+input[type="text"], textarea {
+    width: 95%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.recipe-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f2f9ff;
+    border-radius: 10px;
+}
+
+.recipe {
+    margin: 15px 0;
+}
+
+img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px;
+    width: 100%;
+    background: #6CA0DC;
+    color: white;
+    border: none;
+    border-radius: 6px;
+}
+
+.progress {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 18px;
+    color: #1f4e79;
+}
+
+/* MEAL TRACKER */
+.meal-day {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f2f9ff;
+    border-radius: 8px;
+}
+.meal-block {
+    margin: 5px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<!-- LEFT SIDE -->
+<div class="container">
+
+<h1>🍽️ Weekly Cooking Routine</h1>
+<div class="progress" id="progress">Points: 0</div>
+
+<div id="days"></div>
+
+<div class="recipe-box">
+<h2>🍲 This Week's Recipes</h2>
+
+<!-- RECIPE 1 -->
+<div class="recipe">
+<strong>1. Roast Potatoes</strong>
+<img src="potatoes.jpg">
+<p>Simple roasted potatoes with crispy texture.</p>
+<a href="https://www.bbcgoodfood.com/recipes/roast-potatoes" target="_blank">🔗 View Full Recipe</a>
+<br>
+<label><input type="checkbox" class="recipe-check"> I tried this</label>
+</div>
+
+<!-- RECIPE 2 -->
+<div class="recipe">
+<strong>2. Honey Lemon Carrots</strong>
+<img src="carrots.jpg">
+<p>Sweet and tangy carrots with honey and lemon.</p>
+<a href="https://www.bbcgoodfood.com/recipes/honey-roasted-carrots" target="_blank">🔗 View Full Recipe</a>
+<br>
+<label><input type="checkbox" class="recipe-check"> I tried this</label>
+</div>
+
+<!-- RECIPE 3 -->
+<div class="recipe">
+<strong>3. Beetroot Squash Salad</strong>
+<img src="Beetroot.jpg">
+<p>Healthy salad with roasted vegetables and feta.</p>
+<a href="https://www.bbcgoodfood.com/recipes/roasted-vegetable-salad" target="_blank">🔗 View Full Recipe</a>
+<br>
+<label><input type="checkbox" class="recipe-check"> I tried this</label>
+</div>
+
+</div>
+
+<button onclick="updatePoints()">Update Progress</button>
+
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="sidebar">
+
+<!-- CALENDAR -->
+<div class="box">
+<h3>📅 Calendar</h3>
+<input type="date">
+</div>
+
+<!-- QUOTES -->
+<div class="box">
+<h3>🔥 Cooking Motivation</h3>
+<p id="quote">"Cooking is love made visible ❤️"</p>
+<button onclick="newQuote()">New Quote</button>
+</div>
+
+<!-- CHATBOT -->
+<div class="box">
+<h3>🤖 Cooking Help</h3>
+<div id="chatbox"></div>
+<input type="text" id="userInput" placeholder="Ask your doubt...">
+<button onclick="sendMessage()">Send</button>
+</div>
+
+<!-- MEAL TRACKER -->
+<div class="box">
+<h3>🍱 Daily Meal Tracker</h3>
+<div id="mealTracker"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+// QUOTES
+const quotes = [
+"Cooking is love made visible ❤️",
+"Good food = Good mood 😋",
+"Cooking is an art 🎨",
+"Every dish tells a story 🍲",
+"Cook with passion 💕"
+];
+
+function newQuote() {
+    document.getElementById("quote").innerText =
+        quotes[Math.floor(Math.random() * quotes.length)];
+}
+
+// CHATBOT
+function sendMessage() {
+    let input = document.getElementById("userInput").value;
+    let chatbox = document.getElementById("chatbox");
+
+    if (input.trim() === "") return;
+
+    chatbox.innerHTML += "<p><b>You:</b> " + input + "</p>";
+
+    let reply = "Try asking about salt, oil, or burning 😊";
+    if (input.includes("burn")) reply = "Lower the heat!";
+    if (input.includes("salt")) reply = "Add slowly!";
+    if (input.includes("oil")) reply = "Use medium heat.";
+
+    chatbox.innerHTML += "<p><b>Bot:</b> " + reply + "</p>";
+    document.getElementById("userInput").value = "";
+}
+
+// ORIGINAL TRACKER
+const daysList = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const container = document.getElementById("days");
+
+daysList.forEach(day => {
+    container.innerHTML += `
+    <div class="day">
+        <h3>${day}</h3>
+        <label>
+            <input type="checkbox" class="healthy" onchange="markDone(this)">
+            Did you eat healthy today?
+        </label>
+        <br><br>
+        <input type="text" placeholder="What did you eat?">
+    </div>`;
+});
+
+function markDone(cb) {
+    let box = cb.closest(".day");
+    cb.checked ? box.classList.add("completed") : box.classList.remove("completed");
+    updatePoints();
+}
+
+function updatePoints() {
+    let points = 0;
+    document.querySelectorAll(".healthy").forEach(cb => {
+        if (cb.checked) points += 2;
+    });
+    document.querySelectorAll(".recipe-check").forEach(cb => {
+        if (cb.checked) points += 5;
+    });
+    document.getElementById("progress").innerText = "Points: " + points;
+}
+
+// MEAL TRACKER
+const meals = ["Breakfast", "Lunch", "Dinner"];
+const mealContainer = document.getElementById("mealTracker");
+
+daysList.forEach(day => {
+    let html = `<div class="meal-day"><strong>${day}</strong>`;
+
+    meals.forEach(meal => {
+        html += `
+        <div class="meal-block">
+            <label>
+                <input type="checkbox">
+                ${meal} - Ate healthy?
+            </label><br>
+            <input type="text" placeholder="What did you eat for ${meal}?">
+        </div>`;
+    });
+
+    html += `</div>`;
+    mealContainer.innerHTML += html;
+});
+</script>
+
+</body>
+</html>

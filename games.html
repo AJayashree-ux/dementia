@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fun Brain Games </title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      color: white;
+       background-image:url('https://i.pinimg.com/1200x/ae/88/88/ae8888f91c10d44d8a6714c6632c441b.jpg');
+     background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* Dark overlay */
+    .container {
+      background: rgba(0, 0, 0, 0.5);
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 4em;
+      margin-bottom: 40px;
+      text-shadow: 3px 3px 8px black;
+    }
+
+    p {
+      font-size: 1.5em;
+      margin-bottom: 50px;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    .enter-btn {
+      padding: 20px 50px;
+      font-size: 1.5em;
+      background-color: red;
+      border: 2px solid white;
+      border-radius: 15px;
+      cursor: pointer;
+      color: white;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .enter-btn:hover {
+      background-color: darkred;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  
+
+  <div class="container">
+    <h1>Welcome to Fun Brain Games</h1>
+    <p> step into the world of fun
+    Play memory, puzzle, and word games to boost your brain!</p>
+    <!-- Enter button goes to the game selection page -->
+         
+    <a href="choose_game.html"class="enter-btn">Enter into the Fun World</a>
+    <a href="index.html" style="color:white">⬅Back to Home</a>
+  </div>
+
+
+</body>
+</html>

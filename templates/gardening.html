@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garden Sanctuary</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-dark: #1b5e20;
+  --green-mid: #2e7d32;
+  --green-light: #4caf50;
+  --gold: #f9a825;
+  --gold-light: #fff9c4;
+  --navy: #0d47a1;
+  --ivory: #fafaf7;
+  --text: #1a1a1a;
+  --sidebar-w: 280px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--ivory);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ── WELCOME SPLASH ── */
+#welcome-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(160deg, #1b5e20 0%, #0d3b12 60%, #0d47a1 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 40px;
+}
+
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+#bg-video {
+  filter: brightness(0.6) blur(2px);
+}
+
+
+#welcome-screen h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+#welcome-screen p {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: rgba(255,255,255,0.85);
+  max-width: 600px;
+  margin-bottom: 50px;
+}
+#welcome-screen .leaf-row { font-size: 3rem; margin-bottom: 30px; letter-spacing: 8px; }
+#enter-btn {
+  background: var(--gold);
+  color: #000;
+  border: none;
+  padding: 22px 60px;
+  font-size: 1.3rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  border-radius: 60px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.3);
+}
+#enter-btn:hover { transform: scale(1.05); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+#welcome-quote {
+  margin-top: 40px;
+  font-style: italic;
+  color: rgba(255,255,255,0.6);
+  font-size: 1rem;
+}
+#welcome-num {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: var(--green-dark);
+  color: #fff;
+  position: fixed;
+  top: 0; left: 0;
+  display: flex; flex-direction: column;
+  border-right: 8px solid var(--gold);
+  z-index: 100;
+  overflow: hidden;
+}
+.sidebar-top {
+  padding: 30px 20px 20px;
+  flex-shrink: 0;
+}
+.sidebar-top h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--gold);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 14px;
+  margin-bottom: 6px;
+}
+
+/* Scrollable nav area */
+.sidebar-nav-wrap {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) transparent;
+}
+.sidebar-nav-wrap::-webkit-scrollbar { width: 4px; }
+.sidebar-nav-wrap::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
+
+.sidebar-nav-wrap ul { list-style: none; }
+.sidebar-nav-wrap li {
+  padding: 16px 18px;
+  margin: 8px 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid transparent;
+  transition: 0.25s;
+}
+.sidebar-nav-wrap li:hover,
+.sidebar-nav-wrap li.active-nav { border-color: var(--gold); background: var(--navy); }
+
+.sidebar-bottom {
+  flex-shrink: 0;
+  padding: 16px 20px 20px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+.progress-label { font-size: 0.85rem; margin-bottom: 6px; color: rgba(255,255,255,0.8); }
+.progress-bar { background: rgba(255,255,255,0.2); height: 12px; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+#progress-fill { background: var(--gold); height: 100%; width: 0%; transition: width 0.5s ease; }
+#stats-text { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+.live-badge {
+  margin-top: 14px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 30px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.dot { width: 9px; height: 9px; background: #4caf50; border-radius: 50%; flex-shrink: 0; animation: pulse 1.6s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.5)} }
+
+/* ── MAIN ── */
+#main { margin-left: var(--sidebar-w); padding: 50px 60px; max-width: 1200px; }
+.section { display: none; animation: fadeSlide 0.5s ease; }
+.section.active { display: block; }
+@keyframes fadeSlide { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── CARD ── */
+.card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 36px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+  margin-bottom: 32px;
+  border: 1px solid #e0e0e0;
+}
+.card h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--green-dark);
+  border-left: 6px solid var(--gold);
+  padding-left: 16px;
+  margin-bottom: 20px;
+}
+.card h3 { color: var(--green-dark); margin: 24px 0 10px; font-size: 1.1rem; font-weight: 700; }
+.card p { margin-bottom: 16px; }
+h1.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  color: var(--green-dark);
+  margin-bottom: 32px;
+}
+
+/* ── PHOTO SPACE ── */
+.photo-space {
+  width: 100%;
+  height: 380px;
+  background: #e8f0e8;
+  border: 2px dashed #aac4aa;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #5a7a5a;
+  font-style: italic;
+  padding: 30px;
+  margin: 24px auto;
+  max-width: 700px;
+}
+.photo-space span { font-size: 3rem; margin-bottom: 12px; }
+
+/* ── HOME QUOTE ── */
+#daily-quote-box {
+  background: var(--green-dark);
+  color: #fff;
+  border-radius: 18px;
+  padding: 36px 40px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+#daily-quote-box::before {
+  content: '"';
+  font-family: 'Playfair Display', serif;
+  font-size: 12rem;
+  color: rgba(255,255,255,0.06);
+  position: absolute;
+  top: -30px; left: 10px;
+  line-height: 1;
+}
+#quote-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+#quote-num {
+  font-size: 0.85rem;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+
+/* ── CONFETTI ── */
+#confetti-layer {
+  position: fixed; inset: 0; pointer-events: none; z-index: 8000; overflow: hidden;
+}
+.confetti-piece {
+  position: absolute;
+  width: 10px; height: 10px;
+  opacity: 0;
+  border-radius: 2px;
+  animation: confettiFall 3s ease-in forwards;
+}
+@keyframes confettiFall {
+  0%{opacity:1;transform:translateY(-20px) rotate(0deg);}
+  100%{opacity:0;transform:translateY(100vh) rotate(720deg);}
+}
+
+/* ── TASKS ── */
+.task-list { display: flex; flex-direction: column; gap: 14px; }
+.task-item {
+  background: #fafff8;
+  border: 1px solid #d0e8d0;
+  border-left: 8px solid var(--green-light);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: 0.25s;
+}
+.task-item.done { background: #f1faf1; opacity: 0.75; }
+.task-item.done span { text-decoration: line-through; color: #888; }
+.task-item input[type=checkbox] { width: 30px; height: 30px; cursor: pointer; accent-color: var(--green-dark); flex-shrink: 0; }
+.task-item .remove-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #c62828;
+  font-size: 1.3rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.task-item .remove-btn:hover { background: #fdecea; }
+
+.add-task-row { display: flex; gap: 12px; margin-top: 18px; }
+.add-task-row input[type=text] {
+  flex: 1;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 2px solid #c8e6c9;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.btn-green {
+  background: var(--green-dark);
+  color: #fff;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.btn-green:hover { background: var(--green-mid); }
+.btn-gold {
+  background: var(--gold);
+  color: #000;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+.btn-gold:hover { opacity: 0.88; }
+
+/* Sad plant */
+#sad-plant-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 7000;
+  background: rgba(0,0,0,0.85);
+  align-items: center; justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+#sad-plant-overlay.show { display: flex; }
+#sad-plant-overlay .sad-emoji { font-size: 8rem; animation: droop 2s ease infinite alternate; }
+@keyframes droop { from{transform:rotate(-5deg)} to{transform:rotate(5deg)} }
+#sad-plant-overlay p { color: #fff; font-size: 1.5rem; margin-top: 20px; max-width: 480px; }
+#sad-plant-overlay button { margin-top: 30px; }
+
+/* ── CALENDAR ── */
+.cal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.cal-nav { background: none; border: 2px solid var(--green-dark); color: var(--green-dark); border-radius: 8px; padding: 8px 18px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+.cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 6px; }
+.cal-weekday { text-align: center; font-size: 0.8rem; font-weight: 700; color: var(--green-dark); padding: 6px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.cal-day {
+  background: #fff;
+  height: 58px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #555;
+  position: relative;
+}
+.cal-day.empty { background: transparent; border: none; }
+.cal-day.today { border: 3px solid var(--green-dark); color: var(--green-dark); }
+.cal-day.completed { background: var(--green-dark); color: #fff; border-color: var(--green-dark); }
+.cal-day.completed::after { content: '🌿'; position: absolute; bottom: 2px; right: 4px; font-size: 0.7rem; }
+
+/* ── JOURNAL ── */
+.journal-paper {
+  background: #fffde7;
+  border: 1px solid #f9e79f;
+  border-radius: 16px;
+  padding: 30px;
+}
+.journal-paper textarea {
+  width: 100%; min-height: 140px;
+  padding: 16px; font-family: 'Lato', sans-serif; font-size: 1.05rem;
+  border: 2px solid #c8e6c9; border-radius: 10px; resize: vertical;
+  background: #fff;
+}
+.entry-card {
+  background: #fff;
+  border-left: 5px solid var(--green-light);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-top: 14px;
+}
+.entry-card strong { color: var(--green-dark); }
+
+/* ── PLANT IDENTIFIER ── */
+
+/* ── VIDEOS ── */
+.video-card { margin-bottom: 50px; }
+.video-thumb { position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.video-thumb img { width: 100%; height: 380px; object-fit: cover; display: block; }
+.video-thumb .play-btn {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  background: var(--gold);
+  color: #000;
+  border: 4px solid var(--navy);
+  padding: 18px 40px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+.video-thumb .play-btn:hover { transform: translate(-50%,-50%) scale(1.07); }
+.video-info { padding: 24px 0 0; }
+.video-info h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green-dark); margin-bottom: 10px; }
+
+/* ── VISUAL PATH (Wisdom) ── */
+.wisdom-card { background: #fff; border-radius: 18px; padding: 36px; margin-bottom: 32px; border: 1px solid #e0e0e0; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+.wisdom-card h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--green-dark); margin-bottom: 16px; }
+.wisdom-card p { margin-bottom: 16px; }
+
+/* ── REWARD POP ── */
+#reward-pop {
+  display: none;
+  position: fixed;
+  top: 30px; right: 30px;
+  background: var(--gold);
+  color: #000;
+  padding: 18px 28px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  z-index: 5000;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  animation: popIn 0.4s ease;
+}
+@keyframes popIn { from{opacity:0;transform:scale(0.8)translateY(-10px)} to{opacity:1;transform:scale(1)translateY(0)} }
+
+
+
+/* ── GARDEN IMAGES ── */
+.garden-img {
+  width: 100%;
+  border-radius: 16px;
+  margin: 22px 0;
+  display: block;
+  object-fit: cover;
+  height: 340px;
+}
+
+/* ── PLANT SIMILAR IMAGES ── */
+#plant-similar-wrap { margin: 20px 0 0; }
+#plant-similar-wrap h4 { color: var(--green-dark); font-size: 1rem; margin-bottom: 12px; }
+.similar-imgs { display: flex; gap: 12px; flex-wrap: wrap; }
+.similar-imgs img {
+  width: calc(33% - 8px);
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #c8e6c9;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.similar-imgs img:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+
+/* ── EXTRA TASK SUGGESTIONS ── */
+#task-suggestions {
+  margin-top: 20px;
+  padding: 18px;
+  background: #f1f8f1;
+  border-radius: 14px;
+  border: 1px dashed #a5d6a7;
+}
+#task-suggestions h4 { color: var(--green-dark); font-size: 0.95rem; margin-bottom: 12px; }
+.suggestion-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.suggestion-chip {
+  background: #fff;
+  border: 1.5px solid #a5d6a7;
+  border-radius: 20px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--green-dark);
+  font-weight: 700;
+  transition: background 0.2s, border-color 0.2s;
+  font-family: 'Lato', sans-serif;
+}
+.suggestion-chip:hover { background: #e8f5e9; border-color: var(--green-dark); }
+.suggestion-chip.added { background: var(--green-dark); color: #fff; border-color: var(--green-dark); pointer-events: none; }
+
+/* ── RESPONSIVE ── */
+@media(max-width: 900px) {
+  #main { margin-left: 0; padding: 20px; }
+  #sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+  #sidebar.open { transform: translateX(0); }
+  .tip-grid { grid-template-columns: 1fr; }
+  .similar-imgs img { width: calc(50% - 6px); }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ WELCOME SPLASH ══ -->
+<div id="welcome-screen">
+
+<video autoplay muted loop id="bg-video">
+  <source src="video/feelgood.mp4" type="video/mp4">
+</video>
+
+
+
+  <div class="leaf-row">🌿 🌸 🌿</div>
+  <h1>Welcome to Your<br>Garden Sanctuary</h1>
+  <p>A calm, living space designed for the gardener in you — where every leaf turned is a memory made, and every seed planted is hope for tomorrow.</p>
+  <div id="welcome-quote" id="wq"></div>
+  <button id="enter-btn" onclick="enterSanctuary()">Enter Your Sanctuary →</button>
+  <center>
+           <a href="index.html" class="cta">⬅Back to Home</a>
+     </center>
+</div>
+
+<!-- ══ CONFETTI ══ -->
+<div id="confetti-layer"></div>
+
+<!-- ══ REWARD POP ══ -->
+<div id="reward-pop">✨ Golden Seed Earned! 🌿</div>
+
+<!-- ══ SAD PLANT OVERLAY ══ -->
+<div id="sad-plant-overlay">
+  <div class="sad-emoji">🥀</div>
+  <p>Please complete all your daily tasks to earn the Golden Seed!!</p>
+  <button class="btn-gold" onclick="document.getElementById('sad-plant-overlay').classList.remove('show')">I'll Go Water It Now</button>
+</div>
+
+<!-- ══ SIDEBAR ══ -->
+<div id="sidebar">
+  <div class="sidebar-top">
+    <h2>🌿 Sanctuary</h2>
+  </div>
+
+  <div class="sidebar-nav-wrap">
+    <ul id="nav-list">
+      <li class="active-nav" onclick="show('home',this)">🏠 Welcome Home</li>
+      
+      <li onclick="show('tasks',this)">📋 Daily Rhythm</li>
+      <li onclick="show('calendar',this)">📅 My Calendar</li>
+      <li onclick="show('videos',this)">🎥 Masterclass Series</li>
+      <li onclick="show('wisdom',this)">🌱 Visual Path & Tips</li>
+      <li onclick="show('journal',this)">📜 Garden Journal</li>
+    </ul>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="progress-label">Garden Vitality</div>
+    <div class="progress-bar"><div id="progress-fill"></div></div>
+    <div id="stats-text">0 of 5 tasks complete</div>
+    <div class="live-badge">
+      <div class="dot"></div>
+      <span><span id="live-count">1,208</span> gardeners active now</span>
+    </div>
+  </div>
+
+ </div>
+ 
+ 
+
+<!-- ══ MAIN CONTENT ══ -->
+<div id="main">
+
+  <!-- HOME -->
+  <div id="home" class="section active">
+    <div id="daily-quote-box">
+      <div id="quote-num"></div>
+      <div id="quote-text">Loading your daily inspiration...</div>
+    </div>
+
+    <div class="card">
+      <h2>Your Sanctuary Awaits</h2>
+      <p>This is not a gardening manual. This is a living relationship between you and the green world. Every moment you spend here — listening to your plants, feeling the soil, watching the light — is a moment of deep, restorative healing that science has only recently begun to understand.</p>
+      <p>A gardener is a person who believes, without question, that what they plant today will become something beautiful tomorrow. That belief is the most powerful medicine of all.</p>
+
+      <img
+        src="https://pin.it/3ZDqI5RTY" style="width: 100%; height: 1600px;"
+        alt="An older gardener tending to plants with care"
+        class="garden-img"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <div class="photo-space" style="display:none;">
+        <span>📷</span>
+        <strong>Place Your Own Photo Here</strong><br>
+        A dignified gardener (65+) in their garden — replace the src attribute with your local image path.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>How to Speak to a Plant</h2>
+      <p>This is not a metaphor. When you speak near a plant, your breath carries a gift — carbon dioxide, which the plant draws in to build its leaves and roots. Beyond chemistry, the vibrations of your voice pass through the air and the soil, and research from the Royal Horticultural Society has shown that plants exposed to human speech grow measurably faster than those kept in silence.</p>
+      <p>Speak to your plant as you would to an old friend who listens without interrupting. Tell it about your morning. Describe the colour of the sky today. You do not need to be cheerful. Grief, spoken softly into leaves, is still warmth. The plant does not judge; it receives.</p>
+      <p>Try this each morning: stand close, breathe out slowly toward the leaves, and say one thing you are grateful for. Over time, this single ritual becomes an anchor — a way of grounding yourself in the living present, where the past cannot follow.</p>
+
+      <img
+        src="img/personspeaking.jpg" style="width: 100%; height: 1500px;"
+        alt="A person leaning close to a plant, speaking gently to it"
+        class="garden-img"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <div class="photo-space" style="display:none;">
+        <span>📷</span>
+        <strong>Place Your Own Photo Here</strong><br>
+        Replace the src with: <code>images/personspeaking.jpg</code>
+      </div>
+
+      <h3>The Two-Knuckle Soil Test</h3>
+      <p>Before you water, listen to the soil. Push your index finger into the earth up to your second knuckle. If it feels dry and the soil crumbles, your plant is thirsty. If the soil feels cool and clings to your finger, the roots have enough moisture and are resting quietly. Watering a plant that does not need water is not kindness — it is pressure. Let the soil tell you what it needs.</p>
+
+      <h3>The Patient Leaf Protocol</h3>
+      <p>When you see a yellow or browning leaf, do not pluck it immediately. That leaf is not dying — it is returning everything it has back to the plant. The energy stored in its cells travels downward through the stem and into the roots, feeding the plant one last time. If you remove it too early, you interrupt that act of generosity. Wait. When the leaf releases on its own, it has given everything. Then you may remove it, with gratitude.</p>
+
+      <h3>Touch as Medicine</h3>
+      <p>Running your fingertip along a leaf's surface stimulates the plant's surface cells and, through a phenomenon called thigmomorphogenesis, actually causes it to grow stronger. But the medicine flows both ways. Human skin touching a living plant surface has been measured to lower cortisol levels within minutes. This is why kneeling in the garden after a hard day feels, without explanation, like being forgiven.</p>
+
+      <h3>The Olfactory Anchor</h3>
+      <p>Scent bypasses the rational brain entirely and travels directly to the limbic system — the seat of emotion and memory. Crushing a leaf of lemon balm or fresh mint between your fingers and breathing in deeply does not just smell pleasant; it reaches into memory and retrieves it. Many people find that one particular plant scent carries them, instantly and completely, back to a garden from childhood, a grandmother's kitchen, a moment of pure safety. Use this consciously. Find the scent that brings you home.</p>
+
+      <h3>Morning Light Observation</h3>
+      <p>Spend sixty seconds each morning simply watching the light fall on your plants' leaves. This practice is not idle — it trains your eye to notice change: a leaf that has tilted toward the sun, a stem that has grown overnight, a bud that was not there yesterday. These observations are tiny victories that accumulate into a deep sense of participation in something larger than yourself.</p>
+
+      <h3>The Act of Watering as Meditation</h3>
+      <p>Water slowly. Use a can with a long neck or a narrow-spouted vessel that forces patience. Watch where the water goes — how it darkens the soil in rings, how the thirsty earth pulls it down. This slow, attentive act is a form of meditation that requires no training, no special position, no silence. It only requires that you stay present for those two minutes, completely given over to the simple grace of giving water to a living thing that trusts you.</p>
+    </div>
+  </div>
+
+  <!-- PLANT IDENTIFIER -->
+  <div id="identifier" class="section">
+    <h1 class="page-title">📷 Plant Identifier</h1>
+
+    <div class="card">
+      <p>Upload a clear photograph of your plant — a leaf, a flower, or the whole plant — and our identification system will give you its full name and a personalised care guide. You can also use your device's camera to take a photo directly.</p>
+
+      <div class="id-upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <div class="upload-icon">🌿</div>
+        <p>Click to upload a photo from your device</p>
+        <button class="camera-btn" onclick="event.stopPropagation(); openCamera()">📷 Use Camera</button>
+        <button class="btn-green" style="display:inline-flex;gap:8px;align-items:center;" onclick="event.stopPropagation(); document.getElementById('file-input').click()">📁 Choose from Gallery</button>
+        <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handlePlantUpload(event)">
+        <video id="cam-video" style="display:none;width:100%;border-radius:12px;margin-top:14px;" autoplay playsinline></video>
+        <button id="cam-snap-btn" class="camera-btn" style="display:none;margin-top:10px;" onclick="snapPhoto()">📸 Take Photo</button>
+        <canvas id="cam-canvas" style="display:none"></canvas>
+      </div>
+
+      <div id="id-preview-wrap" style="text-align:center; display:none;">
+        <img id="id-preview" src="" alt="Your plant photo">
+      </div>
+
+      <div class="loading-scan" id="id-loading">
+        <div class="spin">🔍</div>
+        <p style="margin-top:16px; color:#555;">Analysing botanical signature using AI...</p>
+      </div>
+
+      <div id="id-unclear" style="display:none; text-align:center; padding:24px; background:#fff3e0; border-radius:14px; margin-top:20px; border:2px solid #f9a825;">
+        <div style="font-size:2.5rem;">🌫️</div>
+        <p style="font-weight:700; margin:12px 0 8px; color:#e65100;">Image Not Clear Enough</p>
+        <p style="color:#555;">Please upload a clearer, well-lit photo of the plant — ideally showing the leaves, flower, or full plant in focus.</p>
+        <button class="btn-green" style="margin-top:14px;" onclick="resetIdentifier()">📷 Try Another Photo</button>
+      </div>
+
+      <div class="card plant-result" id="id-result">
+        <div class="plant-name" id="plant-name-display"></div>
+        <div class="plant-sci" id="plant-sci-display"></div>
+        <p id="plant-desc-display"></p>
+        <div id="plant-similar-wrap" style="display:none;">
+          <h4>Similar images of this plant</h4>
+          <div class="similar-imgs" id="plant-similar-imgs"></div>
+        </div>
+        <div class="tip-grid" id="plant-tips-grid"></div>
+        <div style="margin-top:28px; text-align:center; border-top:1px solid #e0e0e0; padding-top:20px;">
+          <button class="camera-btn" onclick="resetIdentifier()">📷 Identify Another Plant</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY TASKS -->
+  <div id="tasks" class="section">
+    <h1 class="page-title">📋 Daily Rhythm</h1>
+
+    <div class="card">
+      <p>These are your daily gardening actions. Complete them all to earn full-screen confetti — because you deserve it. Remove any task that does not suit you, add your own, and press <strong>Complete All</strong> when you are done for the day.</p>
+
+      <div class="task-list" id="task-list"></div>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:24px;">
+        <div class="add-task-row" style="flex:1; margin-top:0;">
+          <input type="text" id="new-task-input" placeholder="Write your own care task..." onkeydown="if(event.key==='Enter')addTask()">
+          <button class="btn-green" onclick="addTask()">+ Add My Task</button>
+        </div>
+        <button class="btn-gold" onclick="completeAllTasks()">🌿 Complete Daily Care</button>
+      </div>
+
+      <div id="task-suggestions">
+        <h4>💡 Suggested Extra Tasks — tap to add any you like</h4>
+        <div class="suggestion-chips" id="suggestion-chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="calendar" class="section">
+    <h1 class="page-title">📅 My Garden Calendar</h1>
+    <div class="card">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="calPrev()">← Previous</button>
+        <div style="font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--green-dark);" id="cal-month-label"></div>
+        <button class="cal-nav" onclick="calNext()">Next →</button>
+      </div>
+      <div class="cal-weekdays">
+        <div class="cal-weekday">Sun</div><div class="cal-weekday">Mon</div>
+        <div class="cal-weekday">Tue</div><div class="cal-weekday">Wed</div>
+        <div class="cal-weekday">Thu</div><div class="cal-weekday">Fri</div>
+        <div class="cal-weekday">Sat</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <p style="margin-top:16px; color:#666; font-size:0.9rem;">🌿 = Days you completed all your tasks. Keep the streak going!</p>
+    </div>
+  </div>
+
+  <!-- VIDEOS -->
+  <div id="videos" class="section">
+    <h1 class="page-title">🎥 Masterclass Series</h1>
+    <p style="margin-bottom:32px; color:#555;">Six complete episodes on designing a therapeutic garden sanctuary — from the first walk-through to the final planting. Every part matters.</p>
+
+    <!-- HOW TO USE YOUR OWN THUMBNAIL:
+         Replace the src="images/part1.jpg" with your own image path.
+         Put your images in a folder called "images" next to this HTML file. -->
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img
+          src="img/thumbnail1.jpg"
+          alt="Part 1 — The Design of Independence"
+          onerror="this.src='https://img.youtube.com/vi/JmUsmd8gqsQ/maxresdefault.jpg'"
+          style="width:100%;height:380px;object-fit:cover;display:block;"
+        >
+        <div class="play-btn" onclick="window.open('https://www.youtube.com/watch?v=JmUsmd8gqsQ','_blank')">▶ Watch Part 1</div>
+      </div>
+      <div class="video-info">
+        <h3>Part 1 — The Design of Independence</h3>
+        <p>We meet Maureen, a remarkable woman of 101 who still gardens every day. This episode establishes the foundational principle of the entire series: that a garden designed for a person with memory difficulties must above all preserve their independence and their dignity. We see how clear, straight pathways with visual endpoints allow someone to navigate their garden without needing to ask for help — and why that matters more than any plant choice.</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img
+          src="img/thumbnail2.jpg"
+          alt="Part 2 — Visual Safety and High Contrast"
+          onerror="this.src='https://img.youtube.com/vi/ByZ82xut4GM/maxresdefault.jpg'"
+          style="width:100%;height:380px;object-fit:cover;display:block;"
+        >
+        <div class="play-btn" onclick="window.open('https://www.youtube.com/watch?v=ByZ82xut4GM','_blank')">▶ Watch Part 2</div>
+      </div>
+      <div class="video-info">
+        <h3>Part 2 — Visual Safety and High Contrast</h3>
+        <p>This episode dives deep into how the aging brain perceives depth and distance. When contrast is low — when a step is the same colour as the path, or a pot blends into the soil — the brain genuinely cannot judge the difference. By painting edges, using brightly coloured containers, and removing all trip hazards, we are not decorating; we are reprogramming the garden to communicate clearly with a brain that needs stronger visual signals. The result is not only safer but profoundly more beautiful.</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img
+          src="img/thumbnail3.jpg"
+          alt="Part 3 — Raised Beds and Sensory Memory"
+          onerror="this.src='https://img.youtube.com/vi/-f-oTFtnii8/hqdefault.jpg'"
+          style="width:100%;height:380px;object-fit:cover;display:block;"
+        >
+        <div class="play-btn" onclick="window.open('https://www.youtube.com/watch?v=-f-oTFtnii8','_blank')">▶ Watch Part 3</div>
+      </div>
+      <div class="video-info">
+        <h3>Part 3 — Raised Beds and Sensory Memory</h3>
+        <p>Raised beds are not a concession to old age. They are a design choice that brings the garden up to the gardener — eliminating the need to bend, kneel, or strain. This episode also explores the extraordinary power of scent as a memory trigger, and why plants like Rosemary and Lavender belong in every therapeutic garden. Their fragrances travel directly to the brain's memory centre, retrieving moments that cognitive decline has apparently buried. The scent arrives before the name does, and that is enough.</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img
+          src="img/thumbnail4.jpg"
+          alt="Part 4 — The Pergola and Wide Paths"
+          onerror="this.src='https://img.youtube.com/vi/qbgmTUNVTfo/maxresdefault.jpg'"
+          style="width:100%;height:380px;object-fit:cover;display:block;"
+        >
+        <div class="play-btn" onclick="window.open('https://www.youtube.com/watch?v=qbgmTUNVTfo','_blank')">▶ Watch Part 4</div>
+      </div>
+      <div class="video-info">
+        <h3>Part 4 — The Pergola and Wide Paths</h3>
+        <p>A garden path must be 1,600mm wide — not because this is a regulation, but because a person walking with a companion, or with a frame, needs that width to move without friction. Narrower paths create a psychological pressure that makes the garden feel like an obstacle course rather than a sanctuary. The pergola built in this episode serves a different purpose: it creates a destination. Every garden needs a place to walk toward, a goal at the end of the path that gives the walk its meaning.</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img
+          src="img/thumbnail5.jpg"
+          alt="Part 5 — Soft Greenery and Planting Joy"
+          onerror="this.src='https://img.youtube.com/vi/99xvlYFHIbo/maxresdefault.jpg'"
+          style="width:100%;height:380px;object-fit:cover;display:block;"
+        >
+        <div class="play-btn" onclick="window.open('https://www.youtube.com/watch?v=99xvlYFHIbo','_blank')">▶ Watch Part 5</div>
+      </div>
+      <div class="video-info">
+        <h3>Part 5 — Soft Greenery and Planting Joy</h3>
+        <p>The lawn is installed, and with it comes a transformation that surprises even the design team. Green, living ground cover has a measurable effect on blood pressure and cortisol levels that no paving can replicate. We plant fragrant Gardenias for their welcoming, almost overwhelming warmth, and soft-leaf herbs that invite touch. By the end of this episode, the garden has stopped being a project. It has begun to breathe.</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb">
+        <img
+          src="img/thumbnail6.jpg"
+          alt="Part 6 — Furniture, Final Integration and the Result"
+          onerror="this.src='https://img.youtube.com/vi/Yd4zKBF_fnw/maxresdefault.jpg'"
+          style="width:100%;height:380px;object-fit:cover;display:block;"
+        >
+        <div class="play-btn" onclick="window.open('https://www.youtube.com/watch?v=Yd4zKBF_fnw','_blank')">▶ Watch Part 6</div>
+      </div>
+      <div class="video-info">
+        <h3>Part 6 — Furniture, Final Integration and the Result</h3>
+        <p>The final episode focuses on something often overlooked in garden design: the chair. Furniture in a therapeutic garden must have firm armrests that allow independent sitting and standing, seat heights that do not require effort to rise from, and stability that does not wobble. We see the completed sanctuary for the first time — and we see Maureen in it. That moment, her face, tells you everything that the clinical research can only attempt to describe in numbers.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISUAL PATH & WISDOM -->
+  <div id="wisdom" class="section">
+    <h1 class="page-title">🌱 Visual Path & Clinical Wisdom</h1>
+
+    <div class="wisdom-card">
+      <h2>Soft Fascination — The Resting Mind</h2>
+      <p>Attention Restoration Theory tells us that there are two kinds of attention: directed attention, which we use for work and problem-solving and which depletes, and involuntary attention, which is drawn effortlessly by gentle, moving, unpredictable things — like a leaf turning in a breeze, or light moving through a canopy of branches.</p>
+      <p>A garden filled with soft movement provides what researchers call "soft fascination" — a state in which the mind is engaged enough that it stops ruminating, but not so engaged that it must concentrate. In this state, the pre-frontal cortex rests and recovers. Creativity returns. Anxiety quietens. This is not relaxation in the passive sense; it is active healing through gentle engagement with the living world.</p>
+      <img
+        src="img/sunlightleaves.jpg" style="width: 100%; height: 1500px;"
+        alt="Sunlight filtering through garden leaves — soft fascination"
+        class="garden-img"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <div class="photo-space" style="display:none;">
+        <span>📷</span><strong>Place a Photo Here</strong><br>
+        Sunlight filtering through leaves — the visual definition of soft fascination.
+      </div>
+    </div>
+
+    <div class="wisdom-card">
+      <h2>Wayfinding with Colour — The Brain's Visual Map</h2>
+      <p>A healthy brain builds what neurologists call a "cognitive map" — a mental model of space that allows you to navigate without consciously thinking about it. When that map becomes uncertain, the visual environment must work harder to compensate. Bright pots placed at path junctions act as landmarks. A yellow chair at the end of the garden gives the brain a known destination to navigate toward. A red-leafed plant at a turn signals: this is where the path changes direction.</p>
+      <p>This is not decoration. This is the garden speaking directly to the navigation system of the brain in a language it can still read, even when words have become difficult. Design your garden as a map, and those who walk it will find their way without needing to ask.</p>
+      <img
+        src="img/potwaypath.jpg" style="width: 100%; height: 1500px;"
+        alt="A bright garden path with colourful pots marking the way"
+        class="garden-img"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <div class="photo-space" style="display:none;">
+        <span>📷</span><strong>Place a Photo Here</strong><br>
+        A bright-coloured pot on a garden path — high contrast, purposeful wayfinding.
+      </div>
+    </div>
+
+    <div class="wisdom-card">
+      <h2>Olfactory Anchors — Scent as a Bridge to Memory</h2>
+      <p>Of all the senses, smell is the only one whose signals travel directly to the limbic system — the brain's emotional and memory centre — without first passing through the thalamus. This is why a scent can produce a full, detailed, emotionally complete memory in a fraction of a second, while a photograph of the same event might take a moment to place.</p>
+      <p>In therapeutic garden design, we choose plants not only for their beauty but for their olfactory power. Rosemary for focused clarity. Lavender for calm. Lemon Balm for gentle mood lift. Gardenia for warmth and welcome. Each of these scents is a key to a different room in the palace of memory. Plant them where people will brush past them — at elbow height, along path edges — so the encounter happens naturally, without having to be planned or remembered.</p>
+    </div>
+
+    <div class="wisdom-card">
+      <h2>The Therapeutic Garden Plant Guide</h2>
+      <p>These plants are chosen not merely for their beauty but for their specific therapeutic properties when it comes to creating a healing, accessible outdoor sanctuary.</p>
+
+      <div class="tip-grid">
+        <div class="tip-card">
+          <h4>🪻 Lavender</h4>
+          <p>Reduces anxiety and promotes restful sleep. Plant at arm's height so it can be touched and released. The scent is carried by the lightest breeze.</p>
+        </div>
+        <div class="tip-card">
+          <h4>🌿 Rosemary</h4>
+          <p>Compounds in its scent have been linked to improved memory recall. A sprig rubbed between the fingers delivers an immediate, bracing clarity.</p>
+        </div>
+        <div class="tip-card">
+          <h4>🍋 Lemon Balm</h4>
+          <p>A gentle mood lifter. Leaves are soft and safe to touch repeatedly. Grows easily in pots, making it perfect for a raised bed or a windowsill.</p>
+        </div>
+        <div class="tip-card">
+          <h4>🌺 Gardenia</h4>
+          <p>Its rich, warm scent creates an overwhelming feeling of welcome and safety. Plant near a seating area so the fragrance greets you as you sit.</p>
+        </div>
+        <div class="tip-card">
+          <h4>🌱 Mint</h4>
+          <p>Cooling and grounding. The act of rubbing a mint leaf and breathing in is a fast, reliable sensory anchor that brings you back to the present moment.</p>
+        </div>
+        <div class="tip-card">
+          <h4>🌻 Marigold</h4>
+          <p>High-contrast orange and yellow aid depth perception. Also a natural pest deterrent, keeping the garden chemical-free and safe for close contact.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOURNAL -->
+  <div id="journal" class="section">
+    <h1 class="page-title">📜 Garden Journal</h1>
+    <div class="journal-paper card">
+      <h2>Today in the Garden</h2>
+      <p>Write freely. There are no rules here — only the record of your experience, in your own words, on your own terms.</p>
+      <textarea id="journal-input" placeholder="Today the garden felt..."></textarea>
+      <button class="btn-green" style="margin-top:14px;" onclick="saveJournalEntry()">Save to My History</button>
+    </div>
+
+    <div class="card">
+      <h2>Past Reflections</h2>
+      <div id="journal-history">
+        <p style="color:#888; font-style:italic;">Your journal is empty. Your first entry will appear here as a permanent, private record.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ══ QUOTES ══
+const QUOTES = [
+  ["To plant a garden is to believe in tomorrow.", "Audrey Hepburn"],
+  ["Deep in their roots, all flowers keep the light.", "Theodore Roethke"],
+  ["The glory of gardening: hands in the dirt, head in the sun, heart with nature.", "Alfred Austin"],
+  ["Nature does not hurry, yet everything is accomplished.", "Lao Tzu"],
+  ["He who plants a tree plants a hope.", "Lucy Larcom"],
+  ["A garden is a grand teacher. It teaches patience and careful watchfulness.", "Gertrude Jekyll"],
+  ["Where flowers bloom, so does hope.", "Lady Bird Johnson"],
+  ["The garden is a love song, a duet between a human being and Mother Nature.", "Jeff Cox"],
+  ["In every walk with nature, one receives far more than he seeks.", "John Muir"],
+  ["Earth laughs in flowers.", "Ralph Waldo Emerson"],
+  ["To forget how to dig the earth and to tend the soil is to forget ourselves.", "Mahatma Gandhi"],
+  ["Gardening is the art that uses flowers and plants as paint and the soil and sky as canvas.", "Elizabeth Murray"],
+  ["A tree that is unbending is easily broken.", "Lao Tzu"],
+  ["The best place to seek God is in a garden. You can dig for him there.", "George Bernard Shaw"],
+  ["Adopt the pace of nature: her secret is patience.", "Ralph Waldo Emerson"],
+  ["One touch of nature makes the whole world kin.", "William Shakespeare"],
+  ["All gardening is landscape painting.", "William Kent"],
+  ["We do not inherit the earth from our ancestors; we borrow it from our children.", "Native American Proverb"],
+  ["The creation of a garden is also a kind of autobiography.", "Sydney Eddison"],
+  ["Flowers always make people better, happier, and more helpful; they are sunshine, food and medicine to the soul.", "Luther Burbank"],
+  ["A weed is but an unloved flower.", "Ella Wheeler Wilcox"],
+  ["Life begins the day you start a garden.", "Chinese Proverb"],
+  ["There are no gardening mistakes, only experiments.", "Janet Kilburn Phillips"],
+  ["The soil is the great connector of lives, the source and destination of all.", "Wendell Berry"],
+  ["The garden is a mirror of the heart.", "Unknown"],
+  ["Planting is faith in tomorrow.", "Unknown"],
+  ["Gardens are not made by singing 'Oh, how beautiful!' and sitting in the shade.", "Rudyard Kipling"],
+  ["May your garden teach you, as it has taught me, that beauty is not a goal but a habit.", "Unknown"],
+  ["Flowers are the music of the ground, from earth's lips spoken without sound.", "Edwin Curran"],
+  ["Every flower is a soul blossoming in nature.", "Gerard de Nerval"]
+];
+
+function getDayOfYear() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  return Math.floor((now - start) / 86400000);
+}
+
+function setQuote(el, numEl) {
+  const day = getDayOfYear();
+  const idx = day % QUOTES.length;
+  const [q, a] = QUOTES[idx];
+  if (el) el.textContent = `"${q}" — ${a}`;
+  if (numEl) numEl.textContent = `Day ${day} of the Year · Quote #${idx + 1}`;
+}
+
+// ══ WELCOME SCREEN ══
+function enterSanctuary() {
+  document.getElementById('welcome-screen').style.transition = 'opacity 0.8s';
+  document.getElementById('welcome-screen').style.opacity = '0';
+  setTimeout(() => document.getElementById('welcome-screen').style.display = 'none', 800);
+}
+
+// ══ NAVIGATION ══
+function show(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('#nav-list li').forEach(li => li.classList.remove('active-nav'));
+  if (el) el.classList.add('active-nav');
+  window.scrollTo(0, 0);
+  setQuote(document.getElementById('quote-text'), document.getElementById('quote-num'));
+}
+
+// ══ TASKS ══
+const DEFAULT_TASKS = [
+  "Give thirsty pots a slow, patient drink of water.",
+  "Talk to your plant for two minutes — describe your morning.",
+  "Run your fingers along a leaf and breathe in the scent.",
+  "Look for one small change in your garden since yesterday.",
+  "Clear any debris from your walking path.",
+  "Pinch off any yellowing or dead leaves gently.",
+  "Check that your bird feeder is full and fresh.",
+  "Observe the light on your plants for sixty seconds.",
+  "Smell a flower or herb and name the memory it gives you.",
+  "Water one plant extra slowly, watching the soil absorb it.",
+  "Move one pot to a brighter or shadier spot if needed.",
+  "Wipe dust from one large leaf with a damp cloth.",
+  "Write one word about how the garden feels today.",
+  "Stand barefoot in the garden or on soil for two minutes.",
+  "Check for pests under the leaves of one plant."
+];
+let tasks = [];
+let completedDays = JSON.parse(localStorage.getItem('sg_completed_days') || '[]');
+let wasAllDone = false;
+
+function initTasks() {
+  const saved = localStorage.getItem('sg_tasks');
+  tasks = saved ? JSON.parse(saved) : DEFAULT_TASKS.slice(0, 5).map((t, i) => ({ id: i, text: t, done: false }));
+  wasAllDone = tasks.length > 0 && tasks.every(t => t.done);
+  renderTasks();
+}
+
+function renderTasks() {
+  const list = document.getElementById('task-list');
+  list.innerHTML = '';
+  tasks.forEach(task => {
+    const div = document.createElement('div');
+    div.className = 'task-item' + (task.done ? ' done' : '');
+    div.innerHTML = `
+      <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})">
+      <span>${task.text}</span>
+      <button class="remove-btn" onclick="removeTask(${task.id})" title="Remove this task">✕</button>
+    `;
+    list.appendChild(div);
+  });
+  updateProgress();
+}
+
+function toggleTask(id) {
+  const allWereDone = tasks.length > 0 && tasks.every(t => t.done);
+  tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+  saveTasks();
+  renderTasks();
+  const done = tasks.filter(t => t.done).length;
+  const total = tasks.length;
+  if (done === total && total > 0) {
+    triggerConfetti();
+    markTodayComplete();
+    showReward();
+    wasAllDone = true;
+  } else {
+    if (allWereDone) {
+      // was complete, now unchecked — show sad plant
+      document.getElementById('sad-plant-overlay').classList.add('show');
+    }
+    wasAllDone = false;
+    const today = new Date().toDateString();
+    completedDays = completedDays.filter(d => d !== today);
+    localStorage.setItem('sg_completed_days', JSON.stringify(completedDays));
+    renderCalendar();
+  }
+}
+
+function completeAllTasks() {
+  const done = tasks.filter(t => t.done).length;
+  const total = tasks.length;
+
+  if (done === total && total > 0) {
+    // already all completed
+    triggerConfetti();
+    markTodayComplete();
+    showReward();
+  } else {
+  document.getElementById('sad-plant-overlay').classList.add('show');
+
+  const remaining = tasks.filter(t => !t.done).length;
+  alert(`🌿 You still have ${remaining} tasks left!`);
+}
+}
+
+
+function removeTask(id) {
+  tasks = tasks.filter(t => t.id !== id);
+  if (tasks.length === 0) {
+    document.getElementById('sad-plant-overlay').classList.add('show');
+  }
+  saveTasks();
+  renderTasks();
+}
+
+function addTask() {
+  const input = document.getElementById('new-task-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const maxId = tasks.length ? Math.max(...tasks.map(t => t.id)) : -1;
+  tasks.push({ id: maxId + 1, text, done: false });
+  input.value = '';
+  saveTasks();
+  renderTasks();
+}
+
+function saveTasks() { localStorage.setItem('sg_tasks', JSON.stringify(tasks)); }
+
+function updateProgress() {
+  const done = tasks.filter(t => t.done).length;
+  const total = tasks.length;
+  const pct = total ? (done / total) * 100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('stats-text').textContent = `${done} of ${total} tasks complete`;
+}
+
+// ══ CONFETTI ══
+function triggerConfetti() {
+  const layer = document.getElementById('confetti-layer');
+  layer.innerHTML = '';
+  const colors = ['#f9a825','#1b5e20','#0d47a1','#e53935','#7b1fa2','#ff6f00','#fff'];
+  for (let i = 0; i < 120; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left: ${Math.random()*100}vw;
+      top: -10px;
+      background: ${colors[Math.floor(Math.random()*colors.length)]};
+      width: ${6+Math.random()*10}px;
+      height: ${6+Math.random()*10}px;
+      border-radius: ${Math.random()>0.5?'50%':'2px'};
+      animation-delay: ${Math.random()*1.5}s;
+      animation-duration: ${2+Math.random()*2}s;
+    `;
+    layer.appendChild(piece);
+  }
+  setTimeout(() => layer.innerHTML = '', 5000);
+}
+
+function showReward() {
+  const el = document.getElementById('reward-pop');
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3000);
+}
+
+// ══ CALENDAR ══
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
+function markTodayComplete() {
+  const today = new Date().toDateString();
+  if (!completedDays.includes(today)) {
+    completedDays.push(today);
+    localStorage.setItem('sg_completed_days', JSON.stringify(completedDays));
+  }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent = `${months[calMonth]} ${calYear}`;
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const today = new Date();
+  for (let i = 0; i < firstDay; i++) {
+    const emp = document.createElement('div');
+    emp.className = 'cal-day empty';
+    grid.appendChild(emp);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dayEl = document.createElement('div');
+    dayEl.className = 'cal-day';
+    const thisDate = new Date(calYear, calMonth, d).toDateString();
+    if (d === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear()) {
+      dayEl.classList.add('today');
+    }
+    if (completedDays.includes(thisDate)) dayEl.classList.add('completed');
+    dayEl.textContent = d;
+    grid.appendChild(dayEl);
+  }
+}
+
+function calPrev() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
+function calNext() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
+
+// ══ JOURNAL ══
+function saveJournalEntry() {
+  const text = document.getElementById('journal-input').value.trim();
+  if (!text) return;
+  let history = JSON.parse(localStorage.getItem('sg_journal') || '[]');
+  history.unshift({ date: new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }), text });
+  localStorage.setItem('sg_journal', JSON.stringify(history));
+  document.getElementById('journal-input').value = '';
+  displayJournal();
+}
+
+function displayJournal() {
+  const history = JSON.parse(localStorage.getItem('sg_journal') || '[]');
+  const el = document.getElementById('journal-history');
+  if (!history.length) {
+    el.innerHTML = '<p style="color:#888; font-style:italic;">Your journal is empty. Your first entry will appear here.</p>';
+    return;
+  }
+  el.innerHTML = history.map(h => `
+    <div class="entry-card">
+      <strong>${h.date}</strong>
+      <p style="margin:8px 0 0; color:#333;">${h.text}</p>
+    </div>
+  `).join('');
+}
+
+
+// ══ LIVE COUNTER ══
+setInterval(() => {
+  const el = document.getElementById('live-count');
+  let val = parseInt(el.textContent.replace(/,/g, ''));
+  val += Math.random() > 0.5 ? Math.ceil(Math.random() * 3) : -Math.ceil(Math.random() * 2);
+  if (val < 1100) val = 1100;
+  if (val > 1400) val = 1400;
+  el.textContent = val.toLocaleString();
+}, 6000);
+
+// ══ WELCOME QUOTE ══
+(function () {
+  const wq = document.getElementById('welcome-quote');
+  if (wq) {
+    const day = getDayOfYear();
+    const [q] = QUOTES[day % QUOTES.length];
+    wq.textContent = `"${q}"`;
+  }
+})();
+
+
+
+// ══ SUGGESTION CHIPS ══
+const SUGGESTED_TASKS = [
+  "Repot one plant that has outgrown its container.",
+  "Soak a pot fully in water for 20 minutes.",
+  "Press a flower or leaf in a heavy book as a keepsake.",
+  "Research one new plant you have not grown before.",
+  "Clean your watering can and gardening tools.",
+  "Take a photograph of your garden today.",
+  "Make a simple compost layer with kitchen scraps.",
+  "Tie up any drooping stems with soft garden twine.",
+  "Mist the leaves of indoor plants with a spray bottle.",
+  "Plant one new seed in a small pot.",
+  "Read one gardening article or tip online.",
+  "Trim any overhanging branches blocking light.",
+  "Check the drainage holes of your pots are clear.",
+  "Sit quietly in the garden for five minutes — no phone.",
+  "Give one plant away to a neighbour or friend."
+];
+
+function initSuggestions() {
+  const container = document.getElementById('suggestion-chips');
+  if (!container) return;
+  SUGGESTED_TASKS.forEach((taskText, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'suggestion-chip';
+    chip.textContent = '+ ' + taskText;
+    chip.dataset.idx = i;
+    chip.onclick = function() {
+      const maxId = tasks.length ? Math.max(...tasks.map(t => t.id)) : -1;
+      tasks.push({ id: maxId + 1, text: taskText, done: false });
+      saveTasks();
+      renderTasks();
+      chip.classList.add('added');
+      chip.textContent = '✓ ' + taskText;
+    };
+    container.appendChild(chip);
+  });
+}
+
+// ══ INIT ══
+window.onload = function () {
+  setQuote(document.getElementById('quote-text'), document.getElementById('quote-num'));
+  initTasks();
+  initSuggestions();
+  renderCalendar();
+  displayJournal();
+};
+</script>
+
+</body>
+</html>
