@@ -3,293 +3,148 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dementia Detection</title>
+<title>Dementia Screening Test</title>
 
 <style>
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
-    color: white;
-    text-align: center;
-}
-
-/* NAVBAR */
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
-    z-index: 10;
-}
-
-.nav-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.menu {
-    font-size: 25px;
-    cursor: pointer;
-}
-
-.home {
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.signup {
-    background: green;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* DROPDOWN */
-.dropdown {
-    display: none;
-    position: absolute;
-    top: 50px;
-    left: 20px;
-    background: rgba(0,0,0,0.9);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.dropdown a {
-    display: block;
-    padding: 10px 20px;
-    color: white;
-    text-decoration: none;
-}
-
-.dropdown a:hover {
-    background: red;
-}
-
-/* Video background */
-.video-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: cover;
-    z-index: -2;
-}
-
-/* Overlay */
-.overlay {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    z-index: -1;
-}
-
-/* Container */
-.container {
-    padding: 80px 20px 40px; /* adjusted for navbar */
-}
-
-/* Heading */
-h1 {
-    font-size: 50px;
-    margin-bottom: 20px;
-}
-
-/* Boxes */
-.box {
-    margin: 25px auto;
+    background: #E0FFFF;
     padding: 20px;
-    width: 65%;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.2);
 }
 
-/* Quote */
-.quote-box {
-    font-size: 22px;
-}
-
-/* Image */
-img {
-    width: 250px;
+.container {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 20px;
     border-radius: 10px;
-    margin-top: 15px;
 }
 
-/* Button */
+h2 {
+    text-align: center;
+    color: #1f4e79;
+}
+
+.question {
+    margin: 15px 0;
+}
+
 button {
-    padding: 12px 25px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff4d4d;
+    width: 100%;
+    padding: 12px;
+    background: #6CA0DC;
     color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
     cursor: pointer;
-    margin-top: 10px;
 }
 
 button:hover {
-    background-color: #cc0000;
+    background: #5B8AC4;
 }
 
-ul {
-    text-align: left;
+.result {
+    margin-top: 20px;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
 }
 </style>
 </head>
 
 <body>
-    <video autoplay muted loop class="video-bg">
-    <source src="videos/homeb.mp4" type="video/mp4">
-
-</video>
-
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="nav-left">
-        <div class="menu" onclick="toggleMenu()">☰</div>
-        <div class="home" onclick="goHome()">🏠 Home</div>
-    </div>
-
-
-</div>
-
-<!-- DROPDOWN MENU -->
-
-  <div id="menu" class="dropdown">
-
-
-    
-   <a href="cooking.html" onclick="openActivity('Cooking')">🍳 Cooking</a>
-   <a href="gardening.html" onclick="openActivity('Gardening')">🌱 Gardening</a>
-    <a href="meditation" onclick="openActivity('Meditation')">🧘 Meditation</a>
-    <a href="games.html" onclick="openActivity('Games')">🎮 Playing Games</a>
-    <a href="settings.html" onclick="openActivity('Settings')">⚙ Settings</a>
-    
-</div>
-
-<!-- Video -->
-
-
-
-<div class="overlay"></div>
 
 <div class="container">
 
-    <h1>🧠 Dementia Detection 💙</h1>
+<h2>Dementia Screening Test</h2>
 
-    <!-- Quote -->
-    <div class="box quote-box" id="quote"></div>
+<form id="testForm">
 
-    <!-- Tips -->
-    <div class="box">
-        <h2>🌿 Tips to Manage Dementia</h2>
-        <ul>
-            <li>🏃‍♂️ Exercise daily to keep your brain active</li>
-            <li>🧩 Play puzzles and memory games</li>
-            <li>🥗 Eat healthy food</li>
-            <li>😴 Get proper sleep</li>
-            <li>👨‍👩‍👧 Stay connected with family</li>
-            <li>🧘 Practice meditation</li>
-        </ul>
-    </div>
+<div class="question">
+<p>1. Do you have trouble making everyday decisions?</p>
+<label><input type="radio" name="q1" value="0"> Never</label>
+<label><input type="radio" name="q1" value="1"> Sometimes</label>
+<label><input type="radio" name="q1" value="2"> Always</label>
+</div>
 
-    <!-- Motivation -->
-    <div class="box">
-        <h2>✨ Stay Positive & Strong</h2>
-        <p>
-            💙 You are not alone.  
-            🌟 Small steps every day can improve your memory.  
-            💪 Stay strong, stay active, and believe in yourself.
-        </p>
+<div class="question">
+<p>2. Do you have trouble focusing or concentrating?</p>
+<label><input type="radio" name="q2" value="0"> Never</label>
+<label><input type="radio" name="q2" value="1"> Sometimes</label>
+<label><input type="radio" name="q2" value="2"> Always</label>
+</div>
 
-        <img src="https://cdn.pixabay.com/photo/2017/08/30/07/52/people-2694062_1280.jpg">
-    </div>
+<div class="question">
+<p>3. Do you forget names of familiar objects?</p>
+<label><input type="radio" name="q3" value="0"> Never</label>
+<label><input type="radio" name="q3" value="1"> Sometimes</label>
+<label><input type="radio" name="q3" value="2"> Always</label>
+</div>
 
-    <!-- Articles -->
-    <div class="box">
-        <h2>📖 Helpful Articles & Reviews</h2>
+<div class="question">
+<p>4. Do you get confused in familiar places?</p>
+<label><input type="radio" name="q4" value="0"> Never</label>
+<label><input type="radio" name="q4" value="1"> Sometimes</label>
+<label><input type="radio" name="q4" value="2"> Always</label>
+</div>
 
-        <p><a href="https://www.who.int/news-room/fact-sheets/detail/dementia" target="_blank" style="color:yellow;">WHO Dementia Information</a></p>
-        <p><a href="https://www.alz.org/help-support" target="_blank" style="color:yellow;">Alzheimer’s Support</a></p>
-        <p><a href="https://www.nia.nih.gov/health/dementia" target="_blank" style="color:yellow;">National Institute on Aging</a></p>
-        <p><a href="https://www.dementia.org.au/living-dementia/stories" target="_blank" style="color:yellow;">Real Reviews</a></p>
-    </div>
+<div class="question">
+<p>5. Do you forget dates or repeat conversations?</p>
+<label><input type="radio" name="q5" value="0"> Never</label>
+<label><input type="radio" name="q5" value="1"> Sometimes</label>
+<label><input type="radio" name="q5" value="2"> Always</label>
+</div>
+
+<button type="button" onclick="calculateResult()">Submit</button>
+<center>
+    <a href="home.html" class="cta">Go to Home</a>
+</center>
+  
+</form>
+
+<div class="result" id="result"></div>
 
 </div>
 
 <script>
+function calculateResult() {
+    let total = 0;
 
-// Quotes
-const quotes = [
-    "💙 Small steps every day can improve memory.",
-    "🌟 Stay active and keep your brain strong.",
-    "😊 You are stronger than you think.",
-    "💪 Consistency brings improvement.",
-    "✨ Every day is a new opportunity to grow."
-];
-
-// Daily quote
-function setDailyQuote() {
-    let today = new Date();
-    let index = today.getDate() % quotes.length;
-    document.getElementById("quote").innerText = quotes[index];
-}
-
-// Menu toggle
-function toggleMenu() {
-    let menu = document.getElementById("menu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
-}
-
-// Home click
-function goHome() {
-    window.scrollTo(0, 0);
-}
-function goSignup() {
-    window.location.href = "/signup";
-}
-
-// Activity click
-function openActivity(name) {
-    
-    if (name === "Cooking") {
-        window.location.href = "cooking.html";
-    }
-    else if (name === "Games") {
-        window.location.href = "games.html";
-        
-    }
-        else if (name === "Gardening") {
-        window.location.href = "gardening.html";
+    for (let i = 1; i <= 5; i++) {
+        let answer = document.querySelector('input[name="q' + i + '"]:checked');
+        if (!answer) {
+            alert("Please answer all questions");
+            return;
+        }
+        total += parseInt(answer.value);
     }
 
-            else if (name === "Settings") {
-        window.location.href = "settings.html";
+    let resultText = "";
+
+    if (total <= 2) {
+        resultText = "Low Risk (Normal)";
+    } 
+    else if (total <= 5) {
+        resultText = "Mild Concern";
+    } 
+    else if (total <= 8) {
+        resultText = "Moderate Risk - Consider consulting a doctor";
+    } 
+    else {
+        resultText = "High Risk - Seek medical advice immediately";
     }
 
+    document.getElementById("result").innerText = "Your Score: " + total + " → " + resultText;
 }
 
-// Logout
-function signup() {
-    alert("Logged out successfully!");
-}
+ 
 
-
-setDailyQuote();
-
-
-// Click outside closes sidebar
-
+    // Show message
 
 
 </script>
+
 
 </body>
 </html>
