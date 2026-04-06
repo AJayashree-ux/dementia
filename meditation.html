@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tranquil Mind — Dementia Care Meditation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   DESIGN SYSTEM
+═══════════════════════════════════════ */
+:root{
+  --u:#BDE0FE; --u2:#90C8F0; --u3:#D6EEFF;
+  --night:#04080F; --deep:#060F1E; --mid:#0A1C35; --layer:#0D2245;
+  --gold:#C9A96E; --gold2:rgba(201,169,110,0.12);
+  --white:#FFFFFF;
+  --glass:rgba(189,224,254,0.06); --glass2:rgba(189,224,254,0.12);
+  --border:rgba(189,224,254,0.13); --border2:rgba(189,224,254,0.28);
+  --text:rgba(255,255,255,0.90); --muted:rgba(189,224,254,0.55); --faint:rgba(189,224,254,0.22);
+  --sidebar-w:290px; --peek:40px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--deep);
+  color:var(--text);
+  overflow-x:hidden;
+  cursor:none;
+}
+/* Grain */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;
+}
+
+/* ── CUSTOM CURSOR ── */
+#cDot,#cRing{position:fixed;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .25s,height .25s,opacity .3s;}
+#cDot{width:8px;height:8px;background:var(--u);opacity:.9;}
+#cRing{width:34px;height:34px;border:1px solid rgba(189,224,254,.35);transition:all .18s cubic-bezier(.25,.46,.45,.94);}
+
+/* ── FIXED BG ── */
+#bgScene{position:fixed;inset:0;z-index:0;overflow:hidden;}
+.bg-grad{position:absolute;inset:0;background:radial-gradient(ellipse 130% 90% at 50% 0%,#0D2245 0%,#060F1E 50%,#04080F 100%);}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;animation:orbF ease-in-out infinite alternate;}
+.o1{width:650px;height:650px;top:-180px;left:-100px;background:rgba(189,224,254,.055);animation-duration:16s;}
+.o2{width:500px;height:500px;bottom:-130px;right:-80px;background:rgba(37,99,168,.1);animation-duration:20s;animation-delay:-7s;}
+.o3{width:320px;height:320px;top:45%;left:58%;background:rgba(189,224,254,.04);animation-duration:12s;animation-delay:-4s;}
+@keyframes orbF{from{transform:translate(0,0) scale(1);}to{transform:translate(22px,14px) scale(1.06);}}
+#particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+
+/* ── SIDEBAR ── */
+#sidebarWrap{position:fixed;top:0;left:0;height:100vh;z-index:1000;display:flex;align-items:stretch;}
+#sidebar{
+  width:var(--sidebar-w);height:100%;
+  background:rgba(28, 29, 31, 0.93);
+  backdrop-filter:blur(28px);
+  border-right:1px solid var(--border);
+  transform:translateX(calc(-1 * var(--sidebar-w)));
+  transition:transform .52s cubic-bezier(.77,0,.175,1);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+#sidebar.open{transform:translateX(0);}
+.sb-head{padding:2rem 1.8rem 1.3rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.sb-logo{font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:#fff;text-decoration:none;display:block;font-weight:400;letter-spacing:.04em;}
+.sb-logo span{color:var(--u);font-style:italic;}
+.sb-tag{font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-top:.35rem;}
+.sb-scroll-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:.5rem;background:none;border:none;color:var(--faint);cursor:pointer;transition:color .3s;flex-shrink:0;font-size:1.1rem;}
+.sb-scroll-btn:hover{color:var(--u);}
+.sb-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:.6rem 0;scrollbar-width:thin;scrollbar-color:rgba(189,224,254,.12) transparent;}
+.sb-scroll::-webkit-scrollbar{width:2px;}
+.sb-scroll::-webkit-scrollbar-thumb{background:rgba(189,224,254,.12);border-radius:2px;}
+.sb-section{font-size:.53rem;letter-spacing:.46em;text-transform:uppercase;color:var(--gold);padding:1.1rem 1.8rem .45rem;display:block;}
+.sb-link{
+  display:flex;align-items:center;gap:.85rem;padding:.7rem 1.8rem;
+  text-decoration:none;color:var(--muted);font-size:.8rem;font-weight:300;letter-spacing:.05em;
+  transition:all .28s;border-left:2px solid transparent;cursor:pointer;background:none;border-right:none;border-top:none;border-bottom:none;width:100%;text-align:left;
+}
+.sb-link:hover{color:#fff;background:var(--glass);border-left-color:var(--faint);}
+.sb-link.active{color:#fff;background:var(--glass2);border-left-color:var(--u);}
+.sb-icon{font-size:1.05rem;width:1.3rem;text-align:center;flex-shrink:0;}
+.sb-num{margin-left:auto;font-size:.52rem;letter-spacing:.2em;color:var(--faint);font-family:'Cormorant Garamond',serif;}
+.sb-foot{padding:1.1rem 1.8rem;border-top:1px solid var(--border);flex-shrink:0;}
+.sb-foot p{font-size:.62rem;color:var(--faint);line-height:1.6;text-align:center;}
+
+/* ── PEEK BUTTON ── */
+#peekBtn{
+  position:absolute;left:var(--sidebar-w);top:50%;transform:translateY(-50%);
+  width:var(--peek);height:76px;
+  background:rgba(105, 126, 146, 0.93);backdrop-filter:blur(16px);
+  border:1px solid var(--border);border-left:none;
+  border-radius:0 14px 14px 0;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:left .52s cubic-bezier(.77,0,.175,1),background .3s;z-index:1001;
+}
+#sidebar:not(.open) ~ #peekBtn{left:0;}
+#peekBtn:hover{background:rgba(189,224,254,.08);}
+.peek-arrow{color:var(--u);font-size:.9rem;transition:transform .52s;line-height:1;}
+#sidebar.open ~ #peekBtn .peek-arrow{transform:rotate(180deg);}
+
+/* ── PAGES ── */
+.page{
+  display:none;min-height:100vh;position:relative;z-index:1;
+  padding-left:var(--peek);
+  transition:padding-left .52s cubic-bezier(.77,0,.175,1);
+}
+.page.active{display:block;animation:pgIn .6s ease both;}
+.sidebar-open .page{padding-left:calc(var(--sidebar-w) + var(--peek));}
+@keyframes pgIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+
+/* ── WELCOME PAGE ── */
+#pg-welcome{display:flex;align-items:center;justify-content:center;padding:0;}
+.welcome-scene{position:fixed;inset:0;z-index:1;}
+.sky-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,#020408 0%,#040C18 8%,#060F1E 20%,#08183A 34%,#0E2555 48%,#1A4070 62%,#2B6090 73%,#4A8AB0 82%,#7AB8D4 91%,#BDE0FE 100%);
+}
+#stars{position:absolute;inset:0;pointer-events:none;}
+.moon{
+  position:absolute;top:9%;right:13%;width:88px;height:88px;border-radius:50%;
+  background:radial-gradient(circle at 37% 35%,#EEF7FF,#C8E8FE 50%,#88BACE 100%);
+  box-shadow:0 0 55px 14px rgba(189,224,254,.28),0 0 110px 35px rgba(189,224,254,.1),inset -13px -9px 0 rgba(18,55,90,.24);
+  animation:moonP 7s ease-in-out infinite alternate;
+}
+@keyframes moonP{from{box-shadow:0 0 45px 10px rgba(189,224,254,.22),0 0 100px 25px rgba(189,224,254,.08),inset -13px -9px 0 rgba(18,55,90,.24);}to{box-shadow:0 0 75px 24px rgba(189,224,254,.48),0 0 160px 65px rgba(189,224,254,.18),inset -13px -9px 0 rgba(18,55,90,.24);}}
+#mountains{position:absolute;bottom:165px;left:0;right:0;height:240px;overflow:hidden;}
+.mt{position:absolute;bottom:0;clip-path:polygon(50% 0%,0% 100%,100% 100%);}
+#trees{position:absolute;bottom:158px;left:0;right:0;height:190px;display:flex;align-items:flex-end;justify-content:space-around;padding:0 .5%;overflow:hidden;}
+.pine{background:#030710;clip-path:polygon(50% 0%,0% 100%,100% 100%);flex-shrink:0;}
+.mist{position:absolute;left:-5%;right:-5%;border-radius:50%;filter:blur(48px);animation:mistS ease-in-out infinite alternate;pointer-events:none;}
+.m1{background:radial-gradient(ellipse,rgba(189,224,254,.1),transparent 65%);bottom:148px;height:170px;animation-duration:10s;}
+.m2{background:radial-gradient(ellipse,rgba(122,184,216,.08),transparent 60%);bottom:105px;height:140px;animation-duration:14s;animation-delay:-5s;}
+.m3{background:radial-gradient(ellipse,rgba(255,255,255,.05),transparent 55%);bottom:158px;height:95px;animation-duration:8s;animation-delay:-2s;}
+@keyframes mistS{from{transform:translateX(-4%);}to{transform:translateX(4%);}}
+#lake{position:absolute;bottom:0;left:0;right:0;height:170px;background:linear-gradient(to top,#020508 0%,#040A16 28%,#071530 58%,transparent 100%);overflow:hidden;}
+.wrpl{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,rgba(189,224,254,.07) 20%,rgba(189,224,254,.32) 50%,rgba(189,224,254,.07) 80%,transparent 100%);border-radius:50%;animation:wrplM linear infinite;}
+@keyframes wrplM{0%{transform:scaleX(.5) translateY(0);opacity:0;}15%{opacity:1;}85%{opacity:.6;}100%{transform:scaleX(1.1) translateY(-72px);opacity:0;}}
+.fig-wrap{position:absolute;bottom:155px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;animation:figF 8s ease-in-out infinite alternate;z-index:3;}
+@keyframes figF{from{transform:translateX(-50%) translateY(0);}to{transform:translateX(-50%) translateY(-13px);}}
+.fig-glow{position:absolute;bottom:-8px;width:180px;height:55px;background:radial-gradient(ellipse,rgba(189,224,254,.45),transparent 68%);filter:blur(14px);animation:glwB 5s ease-in-out infinite alternate;}
+@keyframes glwB{from{opacity:.4;transform:scaleX(.8);}to{opacity:.9;transform:scaleX(1.1);}}
+.aura-r{position:absolute;border-radius:50%;border:1px solid rgba(189,224,254,.15);animation:auraE ease-out infinite;pointer-events:none;}
+@keyframes auraE{0%{transform:translate(-50%,-50%) scale(.4);opacity:.7;}100%{transform:translate(-50%,-50%) scale(2.9);opacity:0;}}
+.welcome-content{
+  position:absolute;top:9%;left:0;right:0;text-align:center;z-index:10;
+  animation:wFade 1.8s .3s ease both;
+}
+@keyframes wFade{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+.w-badge{
+  display:inline-flex;align-items:center;gap:.7rem;border:1px solid rgba(189,224,254,.18);border-radius:100px;
+  padding:.42rem 1.3rem;font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;color:rgba(189,224,254,.62);
+  background:rgba(4,8,15,.4);backdrop-filter:blur(10px);margin-bottom:1.8rem;
+}
+.bdot{width:4px;height:4px;border-radius:50%;background:var(--gold);animation:bdotP 2s ease-in-out infinite;}
+@keyframes bdotP{0%,100%{opacity:.35;}50%{opacity:1;}}
+.w-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.8rem,11vw,9rem);font-weight:300;line-height:.95;color:#fff;text-shadow:0 0 80px rgba(189,224,254,.18);margin-bottom:.3rem;}
+.w-title em{font-style:italic;color:#BDE0FE;}
+.w-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2.4vw,1.42rem);font-style:italic;color:rgba(189,224,254,.58);margin:1.1rem auto 2.8rem;max-width:460px;line-height:1.6;font-weight:300;}
+.enter-btn{
+  display:inline-flex;align-items:center;gap:.85rem;padding:1.05rem 3.3rem;
+  font-family:'Outfit',sans-serif;font-weight:300;font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;
+  color:rgba(189,224,254,.88);border:1px solid rgba(189,224,254,.28);background:rgba(4,8,15,.38);
+  backdrop-filter:blur(10px);cursor:pointer;overflow:hidden;position:relative;transition:all .45s;text-decoration:none;
+}
+.enter-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(189,224,254,.1),transparent);transform:translateX(-100%);transition:transform .6s;}
+.enter-btn:hover{color:#fff;border-color:rgba(189,224,254,.68);box-shadow:0 0 55px rgba(189,224,254,.14);}
+.enter-btn:hover::before{transform:translateX(100%);}
+.e-arrow{transition:transform .4s;}
+.enter-btn:hover .e-arrow{transform:translateX(6px);}
+
+/* ── INNER PAGES COMMON ── */
+.pg-wrap{max-width:1100px;margin:0 auto;padding:7rem 3rem 6rem;}
+.pg-hero{margin-bottom:4.5rem;}
+.pg-num{font-family:'Cormorant Garamond',serif;font-size:clamp(6rem,16vw,13rem);font-weight:300;color:rgba(189,224,254,.03);position:fixed;top:2rem;right:2rem;line-height:1;pointer-events:none;user-select:none;z-index:0;}
+.eyebrow{font-size:.6rem;letter-spacing:.48em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.9rem;}
+.disp-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,7vw,6rem);font-weight:300;line-height:1.05;color:#fff;}
+.disp-title em{font-style:italic;color:var(--u);}
+.body-txt{font-size:clamp(.88rem,1.6vw,1.02rem);color:var(--muted);line-height:1.9;font-weight:300;max-width:520px;}
+
+/* Glass card */
+.gc{background:rgba(4,12,26,.6);border:1px solid var(--border);border-radius:24px;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.38),inset 0 1px 0 rgba(189,224,254,.07);}
+.gc-light{background:rgba(189,224,254,.055);border:1px solid var(--border2);border-radius:18px;backdrop-filter:blur(12px);}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:.55rem;font-family:'Outfit',sans-serif;font-size:.76rem;font-weight:400;letter-spacing:.22em;text-transform:uppercase;border-radius:100px;padding:.9rem 2.3rem;cursor:pointer;transition:all .38s;border:none;text-decoration:none;}
+.btn-p{background:rgba(189,224,254,.13);border:1px solid rgba(189,224,254,.33);color:#fff;}
+.btn-p:hover{background:rgba(189,224,254,.23);border-color:rgba(189,224,254,.68);box-shadow:0 8px 30px rgba(189,224,254,.14);}
+.btn-g{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-g:hover{border-color:var(--border2);color:#fff;}
+
+/* Reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .68s ease,transform .68s ease;}
+.rv.on{opacity:1;transform:none;}
+.r2{transition-delay:.14s;}.r3{transition-delay:.26s;}.r4{transition-delay:.38s;}
+
+/* Two-col layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start;}
+.two-col-center{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;}
+@media(max-width:850px){.two-col,.two-col-center{grid-template-columns:1fr;}}
+
+/* Rule */
+.rule{display:flex;align-items:center;gap:1.4rem;margin:4rem 0;}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);}
+.rdot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+
+/* ═══════════════════════════════
+   MAIN HUB PAGE
+═══════════════════════════════ */
+.hub-hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:5rem 3rem 4rem calc(var(--peek) + 3rem);position:relative;overflow:hidden;
+}
+.sidebar-open .hub-hero{padding-left:calc(var(--sidebar-w) + var(--peek) + 3rem);}
+.hub-orb{position:absolute;width:620px;height:620px;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(189,224,254,.06),transparent 68%);animation:hOrb 10s ease-in-out infinite alternate;pointer-events:none;}
+@keyframes hOrb{from{transform:translate(-50%,-50%) scale(.88);}to{transform:translate(-50%,-50%) scale(1.12);}}
+.hub-inner{position:relative;z-index:2;max-width:660px;}
+.hub-greeting{font-size:.6rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:1.1rem;}
+.hub-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:300;line-height:1.05;color:#fff;margin-bottom:1.3rem;}
+.hub-title em{font-style:italic;color:var(--u);}
+.hub-desc{font-size:clamp(.9rem,1.7vw,1.06rem);color:var(--muted);line-height:1.9;font-weight:300;max-width:490px;margin-bottom:2.6rem;}
+.hub-btns{display:flex;gap:.9rem;flex-wrap:wrap;}
+
+.hub-quote{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3.2rem 3rem;text-align:center;background:rgba(4,12,26,.35);position:relative;z-index:1;}
+.hub-quote blockquote{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.78rem);font-weight:300;font-style:italic;color:rgba(255,255,255,.78);max-width:660px;margin:0 auto;line-height:1.6;}
+.hub-quote cite{display:block;margin-top:.9rem;font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-style:normal;}
+
+.act-section{padding:5rem 3rem 7rem calc(var(--peek) + 3rem);position:relative;z-index:1;}
+.sidebar-open .act-section{padding-left:calc(var(--sidebar-w) + var(--peek) + 3rem);}
+.act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.3rem;max-width:1100px;margin-top:3rem;}
+.act-card{
+  position:relative;background:rgba(4,12,26,.55);border:1px solid var(--border);border-radius:22px;
+  padding:2.3rem 2rem;cursor:pointer;overflow:hidden;transition:all .42s cubic-bezier(.25,.46,.45,.94);
+  text-align:left;font-family:'Outfit',sans-serif;width:100%;
+}
+.act-card::before{content:'';position:absolute;inset:0;border-radius:22px;background:radial-gradient(circle at 25% 25%,rgba(189,224,254,.08),transparent 58%);opacity:0;transition:opacity .38s;}
+.act-card:hover{transform:translateY(-6px);border-color:var(--border2);box-shadow:0 22px 65px rgba(0,0,0,.4);}
+.act-card:hover::before{opacity:1;}
+.ac-num{position:absolute;top:.9rem;right:1.3rem;font-family:'Cormorant Garamond',serif;font-size:3.2rem;font-weight:300;color:rgba(189,224,254,.04);line-height:1;}
+.ac-icon{font-size:1.9rem;margin-bottom:1.1rem;display:block;}
+.ac-cat{font-size:.54rem;letter-spacing:.36em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.45rem;}
+.ac-title{font-family:'Cormorant Garamond',serif;font-size:1.42rem;font-weight:400;color:#fff;margin-bottom:.55rem;line-height:1.2;}
+.ac-desc{font-size:.76rem;color:var(--muted);line-height:1.7;}
+.ac-arrow{position:absolute;bottom:1.5rem;right:1.7rem;color:var(--faint);font-size:1.05rem;transition:all .3s;}
+.act-card:hover .ac-arrow{color:var(--u);transform:translateX(4px);}
+
+/* ═══════════════════════════════
+   BREATHING PAGE
+═══════════════════════════════ */
+#pg-breathing .pg-wrap{padding-top:0;}
+.breath-layout{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;gap:0;}
+@media(max-width:850px){.breath-layout{grid-template-columns:1fr;}}
+.breath-left{padding:7rem 3rem 5rem calc(var(--peek) + 3.5rem);display:flex;flex-direction:column;justify-content:center;}
+.sidebar-open .breath-left{padding-left:calc(var(--sidebar-w) + var(--peek) + 3.5rem);}
+.breath-right{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 3rem;background:rgba(3,8,18,.4);border-left:1px solid var(--border);position:sticky;top:0;min-height:100vh;}
+.tech-list{display:flex;flex-direction:column;gap:.9rem;margin:2rem 0 2.5rem;}
+.tech-item{background:var(--glass);border:1px solid var(--border);border-left:3px solid transparent;border-radius:16px;padding:1.05rem 1.4rem;cursor:pointer;transition:all .32s;}
+.tech-item:hover{background:var(--glass2);border-color:var(--border2);}
+.tech-item.sel{background:rgba(189,224,254,.1);border-color:var(--border2);border-left-color:var(--u);}
+.tech-name{font-family:'Cormorant Garamond',serif;font-size:1.12rem;color:#fff;margin-bottom:.28rem;}
+.tech-desc{font-size:.72rem;color:var(--muted);line-height:1.5;}
+.tech-badge{display:inline-block;margin-top:.45rem;font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,169,110,.28);padding:.15rem .65rem;border-radius:100px;}
+/* Orb */
+.orb-stage{position:relative;width:270px;height:270px;display:flex;align-items:center;justify-content:center;margin-bottom:2.2rem;flex-shrink:0;}
+.orb-ring{position:absolute;border-radius:50%;border:1px solid rgba(189,224,254,.14);animation:oRing 5s ease-in-out infinite;}
+.orb-ring:nth-child(2){width:100%;height:100%;animation-delay:0s;}
+.orb-ring:nth-child(3){width:76%;height:76%;animation-delay:.6s;border-color:rgba(189,224,254,.22);}
+.orb-ring:nth-child(4){width:53%;height:53%;animation-delay:1.2s;border-color:rgba(189,224,254,.34);}
+@keyframes oRing{0%,100%{transform:scale(1);opacity:.5;}50%{transform:scale(1.04);opacity:1;}}
+.prog-svg{position:absolute;inset:0;transform:rotate(-90deg);}
+.p-track{fill:none;stroke:rgba(189,224,254,.05);stroke-width:2;}
+.p-fill{fill:none;stroke:rgba(189,224,254,.52);stroke-width:2;stroke-linecap:round;transition:stroke-dashoffset .4s linear;}
+.orb-core{
+  width:105px;height:105px;border-radius:50%;position:relative;z-index:2;
+  background:radial-gradient(circle at 36% 32%,rgba(189,224,254,.92),rgba(90,168,220,.7) 54%,rgba(26,74,122,.88));
+  box-shadow:0 0 55px rgba(189,224,254,.32),0 0 110px rgba(189,224,254,.1),inset 0 0 28px rgba(255,255,255,.08);
+}
+.orb-core.expanding{animation:cExp 4s ease-in-out forwards;}
+.orb-core.contracting{animation:cCon 5s ease-in-out forwards;}
+@keyframes cExp{to{transform:scale(1.88);box-shadow:0 0 95px rgba(189,224,254,.62),0 0 180px rgba(189,224,254,.2);}}
+@keyframes cCon{to{transform:scale(1);box-shadow:0 0 48px rgba(189,224,254,.28);}}
+.b-label{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-style:italic;color:#fff;text-align:center;min-height:2.5rem;text-shadow:0 0 40px rgba(189,224,254,.38);}
+.b-hint{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-align:center;margin:.4rem 0 2.2rem;min-height:1.1rem;}
+.b-cycles{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--faint);margin-bottom:1.8rem;}
+
+/* ═══════════════════════════════
+   TIMER PAGE
+═══════════════════════════════ */
+#pg-timer .pg-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding-top:5rem;padding-bottom:5rem;}
+.timer-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:2.8rem;align-items:center;width:100%;max-width:900px;margin-top:3rem;}
+@media(max-width:760px){.timer-grid{grid-template-columns:1fr;}}
+.preset-list{display:flex;flex-direction:column;gap:.65rem;}
+.preset-item{
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;
+  padding:.85rem 1.3rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:1rem;
+  font-family:'Outfit',sans-serif;text-align:left;width:100%;
+}
+.preset-item:hover{background:var(--glass2);border-color:var(--border2);}
+.preset-item.active{background:rgba(189,224,254,.11);border-color:rgba(189,224,254,.33);}
+.p-mins{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;color:#fff;min-width:2.4rem;line-height:1;}
+.p-info strong{display:block;font-size:.8rem;color:var(--text);font-weight:400;}
+.p-info span{font-size:.68rem;color:var(--muted);}
+/* Clock */
+.clock-wrap{position:relative;width:300px;height:300px;flex-shrink:0;margin:0 auto;}
+.clock-svg{position:absolute;inset:0;transform:rotate(-90deg);}
+.c-track{fill:none;stroke:rgba(189,224,254,.055);stroke-width:2.5;}
+.c-fill{fill:none;stroke:rgba(189,224,254,.48);stroke-width:2.5;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
+.deco-ring{position:absolute;border-radius:50%;border:1px solid rgba(189,224,254,.06);animation:decoR linear infinite;}
+.dr1{inset:-22px;animation-duration:65s;}
+.dr2{inset:-44px;animation-duration:95s;animation-direction:reverse;}
+@keyframes decoR{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.clock-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;}
+.t-digits{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:300;color:#fff;line-height:1;letter-spacing:-.02em;text-shadow:0 0 55px rgba(189,224,254,.28);}
+.t-phase{font-size:.6rem;letter-spacing:.38em;text-transform:uppercase;color:var(--muted);min-height:.9rem;}
+/* Right panel */
+.timer-right{text-align:left;}
+.t-aff{background:rgba(4,12,26,.5);border:1px solid var(--border);border-left:3px solid rgba(189,224,254,.22);border-radius:16px;padding:1.3rem 1.5rem;margin-bottom:1.3rem;}
+.t-aff p{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:rgba(255,255,255,.78);line-height:1.62;transition:opacity .5s;}
+.t-aff cite{font-size:.62rem;letter-spacing:.18em;color:var(--gold);font-style:normal;display:block;margin-top:.35rem;}
+.bell-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1.2rem;justify-content:flex-end;}
+.bell-row label{font-size:.72rem;color:var(--muted);}
+.tog{width:44px;height:24px;background:rgba(189,224,254,.1);border:1px solid var(--border);border-radius:100px;cursor:pointer;position:relative;transition:background .3s;flex-shrink:0;}
+.tog.on{background:rgba(189,224,254,.28);border-color:rgba(189,224,254,.38);}
+.tog-dot{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.28);}
+.tog.on .tog-dot{transform:translateX(20px);}
+.done-msg{display:none;flex-direction:column;align-items:center;gap:.7rem;animation:pgIn .6s ease;}
+.done-msg.show{display:flex;}
+.done-icon{font-size:3.2rem;}
+
+/* ═══════════════════════════════
+   SOUNDS PAGE
+═══════════════════════════════ */
+.sounds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.4rem;margin:3rem 0;}
+.sc{
+  position:relative;background:rgba(4,12,26,.6);border:1px solid var(--border);border-radius:22px;
+  padding:2.2rem;cursor:pointer;transition:all .42s;overflow:hidden;
+}
+.sc::after{content:'';position:absolute;inset:0;border-radius:22px;background:radial-gradient(circle at 28% 28%,rgba(189,224,254,.09),transparent 55%);opacity:0;transition:opacity .38s;}
+.sc:hover{border-color:var(--border2);transform:translateY(-5px);box-shadow:0 22px 65px rgba(0,0,0,.38);}
+.sc:hover::after{opacity:1;}
+.sc.playing{background:rgba(189,224,254,.08);border-color:rgba(189,224,254,.28);box-shadow:0 0 55px rgba(189,224,254,.09);}
+.sc.playing::after{opacity:1;}
+.sc-icon{font-size:2.4rem;margin-bottom:1.3rem;display:block;}
+.sc-cat{font-size:.54rem;letter-spacing:.36em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.5rem;}
+.sc-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:#fff;margin-bottom:.55rem;}
+.sc-desc{font-size:.76rem;color:var(--muted);line-height:1.68;margin-bottom:1.3rem;}
+.wavef{display:flex;align-items:center;gap:3px;height:24px;margin-bottom:1.2rem;}
+.wb{width:3px;border-radius:2px;background:rgba(189,224,254,.22);height:4px;transition:height .2s;}
+.sc.playing .wb{background:rgba(189,224,254,.62);animation:wbA .7s ease-in-out infinite alternate;}
+.wb:nth-child(2){animation-delay:.1s!important;}.wb:nth-child(3){animation-delay:.2s!important;}.wb:nth-child(4){animation-delay:.15s!important;}.wb:nth-child(5){animation-delay:.3s!important;}.wb:nth-child(6){animation-delay:.05s!important;}.wb:nth-child(7){animation-delay:.25s!important;}
+@keyframes wbA{from{height:3px;}to{height:18px;}}
+.sc-status{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);transition:color .3s;}
+.sc.playing .sc-status{color:var(--u2);}
+.vol-bar{background:rgba(4,12,26,.6);border:1px solid var(--border);border-radius:18px;padding:1.6rem 2.2rem;display:flex;align-items:center;gap:1.3rem;max-width:520px;margin-bottom:2.5rem;}
+.vol-icon{font-size:1.3rem;flex-shrink:0;}
+input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;outline:none;cursor:pointer;background:linear-gradient(to right,rgba(189,224,254,.58) 0%,rgba(189,224,254,.58) 55%,rgba(189,224,254,.1) 55%);}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.28);}
+.flute-note{background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.18);border-radius:12px;padding:.9rem 1.1rem;font-size:.72rem;color:rgba(201,169,110,.72);line-height:1.7;margin-top:.8rem;}
+
+/* ═══════════════════════════════
+   CANDLE PAGE
+═══════════════════════════════ */
+.candle-scene{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  padding:5rem 3rem;position:relative;overflow:hidden;
+}
+.candle-bg-glow{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:600px;height:400px;
+  background:radial-gradient(ellipse,rgba(255,160,50,.06) 0%,transparent 68%);
+  pointer-events:none;animation:cBG 4s ease-in-out infinite alternate;
+}
+@keyframes cBG{from{opacity:.4;}to{opacity:.9;}}
+#candleCanvas{border-radius:20px;cursor:none;position:relative;z-index:2;}
+.candle-instruction{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-top:2rem;text-align:center;}
+.candle-info{max-width:520px;text-align:center;margin-bottom:3rem;}
+
+/* ═══════════════════════════════
+   POND PAGE
+═══════════════════════════════ */
+.pond-scene{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 2rem;position:relative;}
+#pondCanvas{border-radius:24px;cursor:crosshair;position:relative;z-index:2;max-width:100%;}
+.pond-info{max-width:520px;text-align:center;margin-bottom:2.5rem;}
+.pond-instruction{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-top:1.8rem;text-align:center;}
+
+/* ═══════════════════════════════
+   SINGING BOWL PAGE
+═══════════════════════════════ */
+.bowl-scene{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:0;}
+@media(max-width:760px){.bowl-scene{grid-template-columns:1fr;}}
+.bowl-left{padding:7rem 3rem 5rem calc(var(--peek) + 3.5rem);display:flex;flex-direction:column;justify-content:center;}
+.sidebar-open .bowl-left{padding-left:calc(var(--sidebar-w) + var(--peek) + 3.5rem);}
+.bowl-right{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 3rem;background:rgba(3,8,18,.4);border-left:1px solid var(--border);min-height:100vh;position:sticky;top:0;}
+#bowlCanvas{cursor:pointer;border-radius:50%;transition:filter .3s;}
+#bowlCanvas:hover{filter:drop-shadow(0 0 30px rgba(189,224,254,.4));}
+.bowl-freq{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:#fff;text-align:center;margin:1.5rem 0 .4rem;letter-spacing:.05em;}
+.bowl-note{font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:2rem;}
+.bowl-ring-vis{display:flex;align-items:center;justify-content:center;gap:4px;height:30px;margin-bottom:1.8rem;}
+.br-bar{width:3px;background:rgba(189,224,254,.25);border-radius:2px;height:4px;transition:all .3s;}
+.bowl-struck .br-bar{background:rgba(189,224,254,.7);animation:brAnim .8s ease-in-out infinite alternate;}
+.br-bar:nth-child(2){animation-delay:.1s!important;}.br-bar:nth-child(3){animation-delay:.2s!important;}.br-bar:nth-child(4){animation-delay:.15s!important;}.br-bar:nth-child(5){animation-delay:.3s!important;}.br-bar:nth-child(6){animation-delay:.05s!important;}.br-bar:nth-child(7){animation-delay:.25s!important;}
+@keyframes brAnim{from{height:4px;}to{height:24px;}}
+.bowl-hints{display:flex;flex-direction:column;gap:.6rem;max-width:340px;}
+.bowl-hint-item{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:.8rem 1.2rem;font-size:.74rem;color:var(--muted);line-height:1.6;}
+.bowl-hint-item strong{color:#fff;display:block;margin-bottom:.2rem;font-size:.8rem;}
+
+/* ═══════════════════════════════
+   AFFIRMATIONS PAGE
+═══════════════════════════════ */
+.aff-layout{display:grid;grid-template-columns:1.35fr 1fr;gap:3rem;align-items:start;}
+@media(max-width:760px){.aff-layout{grid-template-columns:1fr;}}
+.aff-display{
+  min-height:280px;display:flex;flex-direction:column;justify-content:center;
+  padding:3rem;background:rgba(4,12,26,.6);border:1px solid var(--border);border-radius:24px;position:relative;overflow:hidden;
+}
+.aff-display::before{content:'"';position:absolute;top:-24px;left:14px;font-family:'Cormorant Garamond',serif;font-size:12rem;color:rgba(189,224,254,.04);line-height:1;pointer-events:none;}
+.aff-emoji{font-size:2.6rem;margin-bottom:1.2rem;animation:affSway 3s ease-in-out infinite;}
+@keyframes affSway{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+.aff-cat{font-size:.57rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block;}
+.aff-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.2rem,2.5vw,1.72rem);font-style:italic;font-weight:300;color:#fff;line-height:1.55;margin-bottom:1.1rem;transition:opacity .45s,transform .45s;}
+.aff-src{font-size:.7rem;letter-spacing:.14em;color:var(--muted);}
+.cat-btns{display:flex;flex-direction:column;gap:.75rem;}
+.cat-btn{
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:.95rem 1.3rem;
+  cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:.95rem;text-align:left;width:100%;font-family:'Outfit',sans-serif;
+}
+.cat-btn:hover{background:var(--glass2);border-color:var(--border2);}
+.cat-btn.active{background:rgba(189,224,254,.12);border-color:rgba(189,224,254,.32);}
+.cat-em{font-size:1.35rem;}
+.cat-strong{display:block;color:#fff;font-size:.84rem;}
+.cat-sub{color:var(--muted);font-size:.71rem;}
+.next-aff-btn{margin-top:.8rem;align-self:flex-start;}
+
+/* ═══════════════════════════════
+   MIND ACTIVITIES PAGE
+═══════════════════════════════ */
+.mind-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:2rem;margin-top:3rem;}
+@media(max-width:960px){.mind-grid{grid-template-columns:1fr;}}
+.mind-card{background:rgba(4,12,26,.58);border:1px solid var(--border);border-radius:22px;padding:2.4rem;}
+.mind-card h3{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:400;color:#fff;margin-bottom:.5rem;}
+.mind-card p{font-size:.8rem;color:var(--muted);line-height:1.72;margin-bottom:1.4rem;}
+.mind-badge{display:inline-block;font-size:.55rem;letter-spacing:.26em;text-transform:uppercase;color:var(--u2);border:1px solid rgba(189,224,254,.18);padding:.2rem .75rem;border-radius:100px;margin-bottom:1.4rem;}
+/* Journal */
+.journal-ta{width:100%;height:155px;background:rgba(3,8,18,.5);border:1px solid var(--border);border-radius:14px;color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;padding:1.1rem 1.4rem;resize:none;outline:none;transition:border-color .3s;line-height:1.72;}
+.journal-ta:focus{border-color:rgba(189,224,254,.38);}
+.journal-ta::placeholder{color:rgba(189,224,254,.25);}
+.prompts{display:flex;flex-wrap:wrap;gap:.5rem;margin:.9rem 0;}
+.prompt{background:var(--glass);border:1px solid var(--border);border-radius:100px;padding:.3rem .9rem;font-size:.71rem;color:var(--muted);cursor:pointer;transition:all .28s;font-family:'Outfit',sans-serif;}
+.prompt:hover{background:var(--glass2);color:#fff;}
+.save-note-btn{margin-top:.8rem;}
+.saved-msg{font-size:.76rem;color:rgba(189,224,254,.65);font-style:italic;margin-top:.5rem;display:none;}
+/* Word recall */
+.word-box{background:rgba(3,8,18,.45);border:1px solid var(--border);border-radius:14px;padding:1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-style:italic;color:var(--u);text-align:center;margin-bottom:1rem;min-height:78px;display:flex;align-items:center;justify-content:center;letter-spacing:.08em;}
+.word-prompt{font-size:.84rem;color:var(--muted);text-align:center;min-height:1.4rem;font-style:italic;margin-bottom:1.2rem;font-family:'Cormorant Garamond',serif;}
+/* Body scan */
+.scan-box{background:rgba(3,8,18,.45);border:1px solid var(--border);border-radius:14px;padding:1.4rem;font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:rgba(255,255,255,.8);line-height:1.72;min-height:85px;margin-bottom:1rem;display:flex;align-items:center;}
+.scan-prog{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--faint);margin-bottom:1rem;}
+/* Colour breathing */
+.colour-orb{width:120px;height:120px;border-radius:50%;margin:1rem auto 1.2rem;transition:background 3s ease,transform 4s ease,box-shadow 3s ease;background:radial-gradient(circle,#BDE0FE,#2563A8);}
+.col-label{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-style:italic;color:#fff;text-align:center;margin-bottom:.3rem;}
+.col-sub{font-size:.71rem;color:var(--muted);text-align:center;letter-spacing:.12em;margin-bottom:1.2rem;}
+
+/* ═══════════════════════════════
+   JIGSAW PAGE
+═══════════════════════════════ */
+.jigsaw-layout{display:grid;grid-template-columns:auto 1fr;gap:3rem;align-items:start;}
+@media(max-width:900px){.jigsaw-layout{grid-template-columns:1fr;}}
+#puzzleBoard{display:grid;gap:4px;flex-shrink:0;}
+.puzzle-piece{
+  border-radius:10px;cursor:pointer;border:2px solid rgba(189,224,254,.08);
+  transition:all .3s;display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;background:rgba(4,12,26,.7);position:relative;overflow:hidden;
+}
+.puzzle-piece:hover{border-color:rgba(189,224,254,.3);transform:scale(1.04);z-index:2;}
+.puzzle-piece.placed{border-color:rgba(189,224,254,.22);cursor:default;}
+.puzzle-piece.placed:hover{transform:none;}
+.puzzle-piece.selected{border-color:var(--u);box-shadow:0 0 20px rgba(189,224,254,.3);}
+.piece-tray{display:grid;gap:.6rem;margin-top:1.2rem;}
+.tray-piece{
+  background:rgba(189,224,254,.07);border:1px solid var(--border2);border-radius:12px;
+  padding:.8rem;text-align:center;cursor:pointer;font-size:1.6rem;transition:all .3s;
+}
+.tray-piece:hover{background:rgba(189,224,254,.14);transform:scale(1.06);}
+.tray-piece.used{opacity:.25;pointer-events:none;}
+.jig-info{font-size:.78rem;color:var(--muted);line-height:1.7;margin-bottom:1.2rem;}
+.jig-moves{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;margin-bottom:.3rem;}
+.win-msg{display:none;background:rgba(189,224,254,.08);border:1px solid rgba(189,224,254,.2);border-radius:16px;padding:1.8rem;text-align:center;margin-top:1.2rem;}
+.win-msg.show{display:block;animation:pgIn .6s ease;}
+.win-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#fff;margin-bottom:.4rem;}
+
+/* ═══════════════════════════════
+   ZEN STONE GARDEN PAGE
+═══════════════════════════════ */
+.zen-layout{display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start;}
+@media(max-width:900px){.zen-layout{grid-template-columns:1fr;}}
+#zenCanvas{border-radius:20px;cursor:crosshair;max-width:100%;}
+.zen-tools{display:flex;flex-direction:column;gap:.8rem;min-width:160px;}
+.zen-tool-label{font-size:.55rem;letter-spacing:.36em;text-transform:uppercase;color:var(--gold);margin-bottom:.2rem;display:block;}
+.z-tool{
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:.9rem 1.2rem;
+  cursor:pointer;transition:all .3s;font-family:'Outfit',sans-serif;font-size:.8rem;color:var(--muted);text-align:left;width:100%;display:flex;align-items:center;gap:.7rem;
+}
+.z-tool:hover{background:var(--glass2);border-color:var(--border2);color:#fff;}
+.z-tool.active{background:rgba(189,224,254,.12);border-color:rgba(189,224,254,.3);color:#fff;}
+.z-icon{font-size:1.1rem;}
+.stone-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.3rem;}
+.stone-opt{
+  background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:.6rem;
+  cursor:pointer;text-align:center;font-size:1.4rem;transition:all .3s;
+}
+.stone-opt:hover{background:var(--glass2);transform:scale(1.08);}
+.stone-opt.active{border-color:rgba(189,224,254,.4);background:rgba(189,224,254,.1);}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cDot"></div>
+<div id="cRing"></div>
+
+<!-- FIXED BG -->
+<div id="bgScene">
+  <div class="bg-grad"></div>
+  <div class="bg-orb o1"></div>
+  <div class="bg-orb o2"></div>
+  <div class="bg-orb o3"></div>
+  <div id="particles"></div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebarWrap">
+  <div id="sidebar">
+    <div class="sb-head">
+      <a class="sb-logo" onclick="showPage('welcome')">Tranquil <span>Mind</span></a>
+      <div class="sb-tag">Dementia Care · All Ages · Wellness</div>
+    </div>
+    <button class="sb-scroll-btn" id="sbUp">&#8963;</button>
+    <div class="sb-scroll" id="sbScroll">
+      <span class="sb-section">Welcome</span>
+      <button class="sb-link active" onclick="showPage('welcome')"><span class="sb-icon">🌙</span>Welcome<span class="sb-num">00</span></button>
+      <button class="sb-link" onclick="showPage('hub')"><span class="sb-icon">🏠</span>Home<span class="sb-num">01</span></button>
+      <span class="sb-section">Breathing & Rest</span>
+      <button class="sb-link" onclick="showPage('breathing')"><span class="sb-icon">🌬️</span>Guided Breathing<span class="sb-num">02</span></button>
+      <button class="sb-link" onclick="showPage('timer')"><span class="sb-icon">⏱️</span>Meditation Timer<span class="sb-num">03</span></button>
+      <span class="sb-section">Sensory Therapy</span>
+      <button class="sb-link" onclick="showPage('sounds')"><span class="sb-icon">🎵</span>Sound Therapy<span class="sb-num">04</span></button>
+      <button class="sb-link" onclick="showPage('candle')"><span class="sb-icon">🕯️</span>Candle Meditation<span class="sb-num">05</span></button>
+      <button class="sb-link" onclick="showPage('pond')"><span class="sb-icon">🌊</span>Ripple Pond<span class="sb-num">06</span></button>
+      <button class="sb-link" onclick="showPage('bowl')"><span class="sb-icon">🎼</span>Singing Bowl<span class="sb-num">07</span></button>
+      <span class="sb-section">Mind & Heart</span>
+      <button class="sb-link" onclick="showPage('affirmations')"><span class="sb-icon">💛</span>Affirmations<span class="sb-num">08</span></button>
+      <button class="sb-link" onclick="showPage('mind')"><span class="sb-icon">🧠</span>Mind Activities<span class="sb-num">09</span></button>
+      <span class="sb-section">Gentle Games</span>
+      <button class="sb-link" onclick="showPage('jigsaw')"><span class="sb-icon">🧩</span>Nature Jigsaw<span class="sb-num">10</span></button>
+      <button class="sb-link" onclick="showPage('zen')"><span class="sb-icon">🪨</span>Zen Stone Garden<span class="sb-num">11</span></button>
+    </div>
+    <button class="sb-scroll-btn" id="sbDown">&#8964;</button>
+    <div class="sb-foot"><p>Part of the Dementia Care<br/>wellness programme</p></div>
+  </div>
+  <button id="peekBtn" title="Menu"><span class="peek-arrow">&#8250;</span></button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     00. WELCOME PAGE
+══════════════════════════════════════════ -->
+<div id="pg-welcome" class="page active" style="padding:0;min-height:100vh;">
+  <div class="welcome-scene">
+    <div class="sky-bg"></div>
+    <div id="stars"></div>
+    <div class="moon"></div>
+    <div id="mountains"></div>
+    <div class="mist m1"></div><div class="mist m2"></div><div class="mist m3"></div>
+    <div id="trees"></div>
+    <div id="lake"></div>
+    <div class="fig-wrap">
+      <div class="fig-glow"></div>
+      <div class="aura-r" style="width:130px;height:88px;left:50px;top:56px;animation-duration:3.2s;animation-delay:0s;"></div>
+      <div class="aura-r" style="width:130px;height:88px;left:50px;top:56px;animation-duration:3.2s;animation-delay:1.07s;"></div>
+      <div class="aura-r" style="width:130px;height:88px;left:50px;top:56px;animation-duration:3.2s;animation-delay:2.13s;"></div>
+      <svg width="112" height="158" viewBox="0 0 112 158" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 22px rgba(189,224,254,.55));">
+        <circle cx="56" cy="24" r="14" fill="#050E1C" stroke="rgba(189,224,254,.55)" stroke-width=".9"/>
+        <path d="M45 18 Q56 8 67 18" stroke="rgba(189,224,254,.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <rect x="52" y="36" width="8" height="9" rx="3" fill="#050E1C"/>
+        <path d="M26 120 Q41 56 56 49 Q71 56 86 120 Z" fill="#061828" stroke="rgba(189,224,254,.28)" stroke-width=".9"/>
+        <ellipse cx="56" cy="122" rx="34" ry="12" fill="#04080F" stroke="rgba(189,224,254,.22)" stroke-width=".9"/>
+        <path d="M39 81 Q23 94 19 114" stroke="rgba(189,224,254,.48)" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M73 81 Q89 94 93 114" stroke="rgba(189,224,254,.48)" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <ellipse cx="18" cy="116" rx="5" ry="3.5" fill="#050E1C" stroke="rgba(189,224,254,.42)" stroke-width=".7"/>
+        <ellipse cx="94" cy="116" rx="5" ry="3.5" fill="#050E1C" stroke="rgba(189,224,254,.42)" stroke-width=".7"/>
+        <circle cx="56" cy="76" r="7" fill="rgba(189,224,254,.07)" stroke="rgba(189,224,254,.38)" stroke-width=".8"/>
+        <circle cx="56" cy="76" r="3.5" fill="rgba(189,224,254,.5)"/>
+        <circle cx="56" cy="20" r="2" fill="rgba(189,224,254,.6)"/>
+      </svg>
+    </div>
+    <div class="welcome-content">
+      <div class="w-badge"><div class="bdot"></div>A sanctuary for every mind &amp; soul</div>
+      <h1 class="w-title">Tranquil<br/><em>Mind</em></h1>
+      <p class="w-sub">"In the depth of stillness, the soul finds what the world cannot give."</p>
+      <button class="enter-btn" onclick="showPage('hub')">Enter Your Sanctuary <span class="e-arrow">›</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     01. HUB PAGE
+══════════════════════════════════════════ -->
+<div id="pg-hub" class="page">
+  <div class="hub-hero">
+    <div class="hub-orb"></div>
+    <div class="hub-inner">
+      <span class="hub-greeting" id="hubGreeting">✦ Good Evening</span>
+      <h1 class="hub-title rv">Your peaceful<br/><em>sanctuary</em> awaits</h1>
+      <p class="hub-desc rv r2">Every practice here is designed with compassion — for those living with dementia, their loved ones, and everyone who seeks stillness and peace.</p>
+      <div class="hub-btns rv r3">
+        <button class="btn btn-p" onclick="showPage('breathing')">Begin Breathing</button>
+        <button class="btn btn-g" onclick="showPage('sounds')">Sound Therapy</button>
+      </div>
+    </div>
+  </div>
+  <div class="hub-quote">
+    <blockquote>"The present moment is the only time over which we have dominion. It is here — and only here — that peace is found."</blockquote>
+    <cite>— Thích Nhất Hạnh</cite>
+  </div>
+  <div class="act-section">
+    <div class="rv"><span class="eyebrow">Your Practice Menu</span>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.4rem);font-weight:300;color:#fff;line-height:1.1;">Choose your <em style="font-style:italic;color:var(--u);">practice</em></h2>
+    </div>
+    <div class="act-grid">
+      <button class="act-card rv r1" onclick="showPage('breathing')"><div class="ac-num">02</div><span class="ac-icon">🌬️</span><span class="ac-cat">Breathing & Rest</span><div class="ac-title">Guided Breathing</div><p class="ac-desc">Follow the orb. Three therapeutic techniques — Box, 4-7-8, and Coherent breathing.</p><span class="ac-arrow">›</span></button>
+      <button class="act-card rv r2" onclick="showPage('timer')"><div class="ac-num">03</div><span class="ac-icon">⏱️</span><span class="ac-cat">Rest</span><div class="ac-title">Meditation Timer</div><p class="ac-desc">A space of complete silence. Set your time and simply be present.</p><span class="ac-arrow">›</span></button>
+      <button class="act-card rv r3" onclick="showPage('sounds')"><div class="ac-num">04</div><span class="ac-icon">🎵</span><span class="ac-cat">Sensory Therapy</span><div class="ac-title">Sound Therapy</div><p class="ac-desc">Rain, ocean, forest, fire, wind, singing bowl — immersive nature sounds.</p><span class="ac-arrow">›</span></button>
+      <button class="act-card rv r1" onclick="showPage('candle')"><div class="ac-num">05</div><span class="ac-icon">🕯️</span><span class="ac-cat">Sensory Therapy</span><div class="ac-title">Candle Meditation</div><p class="ac-desc">A living, breathing flame to rest your gaze upon. The oldest visual meditation.</p><span class="ac-arrow">›</span></button>
+      <button class="act-card rv r2" onclick="showPage('pond')"><div class="ac-num">06</div><span class="ac-icon">🌊</span><span class="ac-cat">Sensory Therapy</span><div class="ac-title">Ripple Pond</div><p class="ac-desc">Touch the water and watch perfect ripples spread. Each ring carries worry away.</p><span class="ac-arrow">›</span></button>
+      <button class="act-card rv r3" onclick="showPage('bowl')"><div class="ac-num">07</div><span class="ac-icon">🎼</span><span class="ac-cat">Sound Therapy</span><div class="ac-title">Singing Bowl</div><p class="ac-desc">Strike a resonant Tibetan bowl. Let the 432 Hz tone wash through you completely.</p><span class="ac-arrow">›</span></button>
+      <button class="act-card rv r1" onclick="showPage('affirmations')"><div class="ac-num">08</div><span class="ac-icon">💛</span><span class="ac-cat">Mind & Heart</span><div class="ac-title">Affirmations</div><p class="ac-desc">Words of compassion and love — chosen to affirm your sense of self and worth.</p><span class="ac-arrow">›</span></button>
+      <button class="act-card rv r2" onclick="showPage('mind')"><div class="ac-num">09</div><span class="ac-icon">🧠</span><span class="ac-cat">Cognitive Wellness</span><div class="ac-title">Mind Activities</div><p class="ac-desc">Gratitude journal, body scan, colour breathing and gentle word recall.</p><span class="ac-arrow">›</span></button>
+      <button class="act-card rv r3" onclick="showPage('jigsaw')"><div class="ac-num">10</div><span class="ac-icon">🧩</span><span class="ac-cat">Gentle Games</span><div class="ac-title">Nature Jigsaw</div><p class="ac-desc">Gentle nature puzzles. Cognitively nourishing, deeply satisfying.</p><span class="ac-arrow">›</span></button>
+      <button class="act-card rv r1" onclick="showPage('zen')"><div class="ac-num">11</div><span class="ac-icon">🪨</span><span class="ac-cat">Gentle Games</span><div class="ac-title">Zen Stone Garden</div><p class="ac-desc">Arrange stones and rake peaceful patterns in a digital Japanese zen garden.</p><span class="ac-arrow">›</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     02. BREATHING PAGE
+══════════════════════════════════════════ -->
+<div id="pg-breathing" class="page">
+  <div class="breath-layout">
+    <div class="breath-left">
+      <div class="pg-num">02</div>
+      <div class="rv"><span class="eyebrow">Practice Two</span>
+        <h1 class="disp-title" style="margin-bottom:1.3rem;">Guided<br/><em>Breathing</em></h1>
+        <p class="body-txt" style="margin-bottom:2rem;">Conscious breathing activates the parasympathetic nervous system, reduces cortisol, and anchors the mind gently in this present moment.</p>
+        <p class="body-txt" style="font-size:.84rem;margin-bottom:2.2rem;">Choose a technique, press Begin, and follow the glowing orb. Breathe in as it expands, out as it contracts.</p>
+      </div>
+      <div class="tech-list rv r2" id="techList">
+        <div class="tech-item sel" onclick="selectTech(this,'box')">
+          <div class="tech-name">Box Breathing</div>
+          <div class="tech-desc">Balances the nervous system. Clinically used for anxiety, PTSD, and stress relief.</div>
+          <span class="tech-badge">4 · Hold 4 · 4 · Hold 4</span>
+        </div>
+        <div class="tech-item" onclick="selectTech(this,'478')">
+          <div class="tech-name">4-7-8 Breathing</div>
+          <div class="tech-desc">Deep relaxation response. Excellent before sleep and during anxious moments.</div>
+          <span class="tech-badge">4 · Hold 7 · Exhale 8</span>
+        </div>
+        <div class="tech-item" onclick="selectTech(this,'coherent')">
+          <div class="tech-name">Coherent Breathing</div>
+          <div class="tech-desc">Five breaths per minute. Optimises heart rate variability and deep, natural peace.</div>
+          <span class="tech-badge">5 · 5</span>
+        </div>
+      </div>
+      <div class="rv r3" style="display:flex;flex-wrap:wrap;gap:.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+        <span style="font-size:.56rem;padding:.28rem .8rem;border:1px solid var(--border);border-radius:100px;color:var(--muted);">Reduces anxiety</span>
+        <span style="font-size:.56rem;padding:.28rem .8rem;border:1px solid var(--border);border-radius:100px;color:var(--muted);">Improves sleep</span>
+        <span style="font-size:.56rem;padding:.28rem .8rem;border:1px solid var(--border);border-radius:100px;color:var(--muted);">Lowers blood pressure</span>
+        <span style="font-size:.56rem;padding:.28rem .8rem;border:1px solid var(--border);border-radius:100px;color:var(--muted);">Dementia-safe</span>
+      </div>
+    </div>
+    <div class="breath-right">
+      <div class="orb-stage">
+        <svg class="prog-svg" viewBox="0 0 270 270"><circle class="p-track" cx="135" cy="135" r="130"/><circle class="p-fill" id="pRing" cx="135" cy="135" r="130" stroke-dasharray="816" stroke-dashoffset="816"/></svg>
+        <div class="orb-ring"></div><div class="orb-ring"></div><div class="orb-ring"></div>
+        <div class="orb-core" id="orbCore"></div>
+      </div>
+      <div class="b-label" id="bLabel">Ready to begin</div>
+      <div class="b-hint" id="bHint">Choose a technique and press Begin</div>
+      <div class="b-cycles" id="bCycles">Cycles completed: 0</div>
+      <div style="display:flex;gap:.8rem;">
+        <button class="btn btn-p" id="breathBtn" onclick="toggleBreath()">Begin</button>
+        <button class="btn btn-g" onclick="resetBreath()">Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     03. TIMER PAGE
+══════════════════════════════════════════ -->
+<div id="pg-timer" class="page">
+  <div class="pg-wrap" style="display:flex;flex-direction:column;align-items:center;min-height:100vh;justify-content:center;">
+    <div class="pg-num">03</div>
+    <div class="rv" style="text-align:center;margin-bottom:1rem;">
+      <span class="eyebrow">Practice Three</span>
+      <h1 class="disp-title">Meditation <em>Timer</em></h1>
+      <p class="body-txt" style="margin:1rem auto 0;text-align:center;max-width:400px;">Choose your duration. Close your eyes. Let time take care of itself.</p>
+    </div>
+    <div class="timer-grid rv r2">
+      <div>
+        <span style="font-size:.54rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.9rem;">Duration</span>
+        <div class="preset-list">
+          <div class="preset-item active" onclick="setDur(2,this)"><span class="p-mins">2</span><div class="p-info"><strong>Quick Calm</strong><span>A moment of stillness</span></div></div>
+          <div class="preset-item" onclick="setDur(5,this)"><span class="p-mins">5</span><div class="p-info"><strong>Morning Rest</strong><span>Gentle start</span></div></div>
+          <div class="preset-item" onclick="setDur(10,this)"><span class="p-mins">10</span><div class="p-info"><strong>Deep Rest</strong><span>For body and mind</span></div></div>
+          <div class="preset-item" onclick="setDur(15,this)"><span class="p-mins">15</span><div class="p-info"><strong>Full Session</strong><span>Recommended daily</span></div></div>
+          <div class="preset-item" onclick="setDur(20,this)"><span class="p-mins">20</span><div class="p-info"><strong>Extended</strong><span>Deep healing</span></div></div>
+          <div class="preset-item" onclick="setDur(30,this)"><span class="p-mins">30</span><div class="p-info"><strong>Long Form</strong><span>Complete restoration</span></div></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="clock-wrap">
+          <div class="deco-ring dr1"></div><div class="deco-ring dr2"></div>
+          <svg class="clock-svg" viewBox="0 0 300 300" id="clockTickSvg">
+            <circle class="c-track" cx="150" cy="150" r="143"/>
+            <circle class="c-fill" id="clockRing" cx="150" cy="150" r="143" stroke-dasharray="898" stroke-dashoffset="898"/>
+          </svg>
+          <div class="clock-face">
+            <div class="t-digits" id="tDigits">02:00</div>
+            <div class="t-phase" id="tPhase">Select a duration</div>
+          </div>
+        </div>
+        <div class="done-msg" id="doneMsg"><span class="done-icon">✨</span><div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:#fff;">Well done</div><p style="font-size:.8rem;color:var(--muted);">Your session is complete.</p></div>
+        <div style="display:flex;gap:.8rem;margin-top:1.5rem;">
+          <button class="btn btn-p" id="timerBtn" onclick="toggleTimer()">▶ Begin</button>
+          <button class="btn btn-g" onclick="resetTimer()">Reset</button>
+        </div>
+      </div>
+      <div class="timer-right">
+        <div class="t-aff"><p id="tAffText">"Close your eyes. Let your breath become your anchor."</p><cite id="tAffCite">— Begin when ready</cite></div>
+        <div class="bell-row"><span>🔔</span><label>Chime at start &amp; end</label><div class="tog on" id="bellTog" onclick="this.classList.toggle('on')"><div class="tog-dot"></div></div></div>
+        <p style="font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem;">For caregivers</p>
+        <p style="font-size:.73rem;color:var(--muted);line-height:1.82;">Even 5 minutes of quiet sitting reduces anxiety and improves mood in people with dementia. Sit together — it benefits the carer equally.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     04. SOUNDS PAGE
+══════════════════════════════════════════ -->
+<div id="pg-sounds" class="page">
+  <div class="pg-wrap">
+    <div class="pg-num">04</div>
+    <div class="pg-hero rv"><span class="eyebrow">Practice Four</span>
+      <h1 class="disp-title" style="margin-bottom:1.1rem;">Sound <em>Therapy</em></h1>
+      <p class="body-txt">Nature sounds reduce cortisol, ease agitation, and awaken positive memory. Tap a card to begin. Only one sound plays at a time.</p>
+    </div>
+    <div class="vol-bar rv r2">
+      <span class="vol-icon">🔊</span>
+      <span style="font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);min-width:60px;">Volume</span>
+      <input type="range" id="volSlider" min="0" max="100" value="55" oninput="setVol(this)"/>
+      <span style="font-size:.76rem;color:var(--muted);min-width:2rem;" id="volVal">55</span>
+    </div>
+    <div class="sounds-grid">
+      <div class="sc rv r1" id="sc-rain" onclick="playSound('rain',this)"><span class="sc-icon">🌧️</span><span class="sc-cat">Nature · Calming</span><div class="sc-title">Gentle Rain</div><p class="sc-desc">Soft rainfall on leaves — deeply grounding and familiar. Clinically reduces agitation.</p><div class="wavef"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div><span class="sc-status" id="ss-rain">Tap to play</span></div>
+      <div class="sc rv r2" id="sc-ocean" onclick="playSound('ocean',this)"><span class="sc-icon">🌊</span><span class="sc-cat">Nature · Rhythmic</span><div class="sc-title">Ocean Waves</div><p class="sc-desc">Rhythmic waves match the body's natural breathing rhythm, gently inducing calm.</p><div class="wavef"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div><span class="sc-status" id="ss-ocean">Tap to play</span></div>
+      <div class="sc rv r3" id="sc-forest" onclick="playSound('forest',this)"><span class="sc-icon">🌿</span><span class="sc-cat">Nature · Memory</span><div class="sc-title">Forest & Birdsong</div><p class="sc-desc">Bird calls and rustling leaves. Evokes warm outdoor memories and gentle freedom.</p><div class="wavef"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div><span class="sc-status" id="ss-forest">Tap to play</span></div>
+      <div class="sc rv r1" id="sc-fire" onclick="playSound('fire',this)"><span class="sc-icon">🔥</span><span class="sc-cat">Nature · Warmth</span><div class="sc-title">Crackling Fire</div><p class="sc-desc">The warmth of a crackling fire. Deeply familiar, comforting, associated with home.</p><div class="wavef"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div><span class="sc-status" id="ss-fire">Tap to play</span></div>
+      <div class="sc rv r2" id="sc-wind" onclick="playSound('wind',this)"><span class="sc-icon">🍃</span><span class="sc-cat">Nature · Gentle</span><div class="sc-title">Wind Through Leaves</div><p class="sc-desc">A soft breeze moving through trees. Meditative, minimal, and endlessly peaceful.</p><div class="wavef"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div><span class="sc-status" id="ss-wind">Tap to play</span></div>
+      <div class="sc rv r3" style="border-color:rgba(201,169,110,.18);background:rgba(201,169,110,.04);">
+        <span class="sc-icon">🎶</span><span class="sc-cat" style="color:var(--gold);">Devotional · Sacred</span><div class="sc-title">Lord Krishna's Flute</div><p class="sc-desc">The sacred bansuri flute — among the most calming sounds in Indian classical tradition.</p><div class="wavef"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>
+        <div class="flute-note">💛 To add real Krishna flute audio: name your MP3 file <strong>krishna-flute.mp3</strong> and place it in the same folder. It will appear here automatically.</div>
+      </div>
+    </div>
+    <div style="background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.14);border-radius:16px;padding:1.5rem 2rem;max-width:700px;">
+      <p style="font-size:.56rem;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:.65rem;">💙 Note for caregivers</p>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.82;">Music from a person's youth (ages 10–25) tends to produce the strongest positive emotional response in dementia care. Sessions of 15–30 minutes are recommended.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     05. CANDLE PAGE
+══════════════════════════════════════════ -->
+<div id="pg-candle" class="page">
+  <div class="candle-scene">
+    <div class="pg-num">05</div>
+    <div class="candle-bg-glow"></div>
+    <div class="candle-info rv">
+      <span class="eyebrow">Practice Five</span>
+      <h1 class="disp-title" style="margin-bottom:.8rem;">Candle <em>Meditation</em></h1>
+      <p class="body-txt" style="margin:0 auto;text-align:center;">Trataka — the ancient practice of candle gazing. Rest your eyes on the flame and let all thoughts dissolve into the light.</p>
+    </div>
+    <canvas id="candleCanvas" width="420" height="380"></canvas>
+    <p class="candle-instruction">Simply gaze at the flame · Breathe gently · Let your mind go quiet</p>
+    <div style="display:flex;gap:.8rem;margin-top:1.8rem;flex-wrap:wrap;justify-content:center;">
+      <button class="btn btn-p" onclick="toggleCandle(this)">Dim the room</button>
+      <button class="btn btn-g" onclick="toggleCandleWind()">🌬 Add breeze</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     06. POND PAGE
+══════════════════════════════════════════ -->
+<div id="pg-pond" class="page">
+  <div class="pond-scene">
+    <div class="pg-num">06</div>
+    <div class="pond-info rv">
+      <span class="eyebrow">Practice Six</span>
+      <h1 class="disp-title" style="margin-bottom:.8rem;">Ripple <em>Pond</em></h1>
+      <p class="body-txt" style="margin:0 auto;text-align:center;">Touch the water and watch perfect ripples radiate outward. Each ring carries your worries away with it. Simply be here.</p>
+    </div>
+    <canvas id="pondCanvas" width="700" height="420"></canvas>
+    <p class="pond-instruction">Touch or click anywhere on the pond · Watch the rings spread · Breathe</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     07. SINGING BOWL PAGE
+══════════════════════════════════════════ -->
+<div id="pg-bowl" class="page">
+  <div class="bowl-scene">
+    <div class="bowl-left">
+      <div class="pg-num">07</div>
+      <div class="rv"><span class="eyebrow">Practice Seven</span>
+        <h1 class="disp-title" style="margin-bottom:1.2rem;">Singing <em>Bowl</em></h1>
+        <p class="body-txt" style="margin-bottom:2rem;">Tibetan singing bowls have been used for centuries in healing and meditation. The 432 Hz tone resonates with the body's natural frequency, inducing deep relaxation.</p>
+      </div>
+      <div class="rv r2">
+        <div class="bowl-hints">
+          <div class="bowl-hint-item"><strong>How to use</strong>Click or tap the bowl to strike it. Close your eyes and listen as the tone rises, sustains, and fades into silence.</div>
+          <div class="bowl-hint-item"><strong>Benefits</strong>Reduces anxiety, slows heart rate, and anchors awareness in the present moment.</div>
+          <div class="bowl-hint-item"><strong>For dementia care</strong>The resonant tone activates deep emotional memory centres, often evoking calm and familiarity.</div>
+        </div>
+      </div>
+    </div>
+    <div class="bowl-right">
+      <canvas id="bowlCanvas" width="280" height="280" onclick="strikeBowl()"></canvas>
+      <div class="bowl-freq" id="bowlFreq">432 Hz</div>
+      <div class="bowl-note">✦ Crown Chakra · Deep Calm · Healing Tone</div>
+      <div class="bowl-ring-vis" id="bowlVis">
+        <div class="br-bar"></div><div class="br-bar"></div><div class="br-bar"></div><div class="br-bar"></div><div class="br-bar"></div><div class="br-bar"></div><div class="br-bar"></div>
+      </div>
+      <p style="font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;" id="bowlStatus">Tap the bowl to begin</p>
+      <button class="btn btn-p" onclick="strikeBowl()">Strike Bowl</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     08. AFFIRMATIONS PAGE
+══════════════════════════════════════════ -->
+<div id="pg-affirmations" class="page">
+  <div class="pg-wrap">
+    <div class="pg-num">08</div>
+    <div class="pg-hero rv"><span class="eyebrow">Practice Eight</span>
+      <h1 class="disp-title" style="margin-bottom:1rem;">Words of <em>Kindness</em></h1>
+      <p class="body-txt">Compassionate affirmations reduce anxiety and reinforce a sense of self-worth. Choose a theme and let the words wash gently over you.</p>
+    </div>
+    <div class="aff-layout rv r2">
+      <div class="aff-display">
+        <div class="aff-emoji" id="affEmoji">💛</div>
+        <span class="aff-cat" id="affCat">Calm &amp; Peace</span>
+        <div class="aff-text" id="affText">"You are safe. Right here, right now, all is calm. You are held in peace."</div>
+        <div class="aff-src" id="affSrc">— A gentle reminder for this moment</div>
+      </div>
+      <div>
+        <div class="cat-btns">
+          <button class="cat-btn active" onclick="selCat(this,'calm')"><span class="cat-em">🌊</span><div><span class="cat-strong">Calm &amp; Peace</span><span class="cat-sub">Reduce anxiety</span></div></button>
+          <button class="cat-btn" onclick="selCat(this,'love')"><span class="cat-em">❤️</span><div><span class="cat-strong">Love &amp; Belonging</span><span class="cat-sub">Feel connected</span></div></button>
+          <button class="cat-btn" onclick="selCat(this,'identity')"><span class="cat-em">🌟</span><div><span class="cat-strong">Identity &amp; Worth</span><span class="cat-sub">Honour who you are</span></div></button>
+          <button class="cat-btn" onclick="selCat(this,'courage')"><span class="cat-em">🌱</span><div><span class="cat-strong">Strength &amp; Courage</span><span class="cat-sub">For hard moments</span></div></button>
+        </div>
+        <button class="btn btn-p next-aff-btn" onclick="nextAff()">Next Affirmation →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     09. MIND ACTIVITIES PAGE
+══════════════════════════════════════════ -->
+<div id="pg-mind" class="page">
+  <div class="pg-wrap">
+    <div class="pg-num">09</div>
+    <div class="pg-hero rv"><span class="eyebrow">Practice Nine</span>
+      <h1 class="disp-title" style="margin-bottom:1rem;">Mind <em>Activities</em></h1>
+      <p class="body-txt">Evidence-based activities that gently stimulate cognitive function, support emotional processing, and bring a quiet sense of joy and achievement.</p>
+    </div>
+    <div class="mind-grid">
+      <!-- Gratitude Journal -->
+      <div class="mind-card rv r1">
+        <h3>📖 Gratitude Journal</h3>
+        <span class="mind-badge">Memory · Mood · Focus</span>
+        <p>Writing three things you are grateful for each day is one of the most powerful tools for improving mood and mental wellbeing at any age.</p>
+        <div class="prompts">
+          <div class="prompt" onclick="insertPrompt('Today I felt grateful for...')">Today I felt…</div>
+          <div class="prompt" onclick="insertPrompt('A happy memory I treasure is...')">A memory I love…</div>
+          <div class="prompt" onclick="insertPrompt('Someone who made me smile...')">Someone kind…</div>
+          <div class="prompt" onclick="insertPrompt('Something beautiful I noticed...')">Something beautiful…</div>
+        </div>
+        <textarea class="journal-ta" id="journalTA" placeholder="Begin writing here… there are no wrong answers."></textarea>
+        <button class="btn btn-p save-note-btn" onclick="saveJournal()">✦ Save Entry</button>
+        <div class="saved-msg" id="savedMsg">✓ Beautifully saved. Well done.</div>
+      </div>
+      <!-- Colour Breathing -->
+      <div class="mind-card rv r2" style="text-align:center;">
+        <h3>🎨 Colour Breathing</h3>
+        <span class="mind-badge">Anxiety · Calm · Presence</span>
+        <p>Breathe in calming colours, breathe out tension. Particularly effective for dementia-related anxiety.</p>
+        <div class="colour-orb" id="colOrb"></div>
+        <div class="col-label" id="colLabel">Press Begin</div>
+        <div class="col-sub" id="colSub">Breathe in the colour of peace</div>
+        <button class="btn btn-p" id="colBtn" onclick="toggleColour(this)">Begin Colour Breath</button>
+      </div>
+      <!-- Word Recall -->
+      <div class="mind-card rv r3">
+        <h3>💬 Gentle Word Recall</h3>
+        <span class="mind-badge">Memory · Language · Joy</span>
+        <p>A calming word association exercise. Not a test — a joyful exploration of language and memory, at your own pace.</p>
+        <div class="word-box" id="wordBox">Press to reveal a word</div>
+        <div class="word-prompt" id="wordPrompt"></div>
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap;">
+          <button class="btn btn-p" onclick="showWord()">Show Word</button>
+          <button class="btn btn-g" onclick="nextWord()">Next →</button>
+        </div>
+      </div>
+      <!-- Body Scan -->
+      <div class="mind-card rv r4">
+        <h3>🧘 Body Scan Relaxation</h3>
+        <span class="mind-badge">Sleep · Pain · Anxiety</span>
+        <p>A guided awareness journey through the body, releasing tension area by area. Proven to improve sleep and reduce pain perception.</p>
+        <div class="scan-box" id="scanBox">Press Begin to start your body scan journey.</div>
+        <div class="scan-prog" id="scanProg">Step 0 of 11</div>
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap;">
+          <button class="btn btn-p" id="scanBtn" onclick="toggleScan()">Begin Scan</button>
+          <button class="btn btn-g" onclick="resetScan()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     10. JIGSAW PAGE
+══════════════════════════════════════════ -->
+<div id="pg-jigsaw" class="page">
+  <div class="pg-wrap">
+    <div class="pg-num">10</div>
+    <div class="pg-hero rv"><span class="eyebrow">Practice Ten</span>
+      <h1 class="disp-title" style="margin-bottom:1rem;">Nature <em>Jigsaw</em></h1>
+      <p class="body-txt">Gentle 9-piece nature puzzles. Choose a piece from the tray, then click a board space to place it. Cognitively nourishing and deeply satisfying.</p>
+    </div>
+    <div class="jigsaw-layout rv r2">
+      <div>
+        <div id="puzzleBoard" style="grid-template-columns:repeat(3,1fr);width:330px;"></div>
+        <div class="win-msg" id="winMsg">
+          <div class="win-title">🌸 Beautiful!</div>
+          <p style="font-size:.82rem;color:var(--muted);margin:.4rem 0 1rem;">You completed the puzzle. Wonderful work.</p>
+          <button class="btn btn-p" onclick="newPuzzle()">Play Again</button>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:.56rem;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;">Piece Tray</p>
+        <div class="jig-moves" id="jigMoves">Moves: 0</div>
+        <div id="pieceTray" class="piece-tray" style="grid-template-columns:repeat(3,1fr);max-width:200px;"></div>
+        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+          <div class="jig-info">Click a piece from the tray, then click a space on the board to place it. Find the right position for each one.</div>
+          <button class="btn btn-g" style="margin-top:.8rem;" onclick="newPuzzle()">New Puzzle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     11. ZEN GARDEN PAGE
+══════════════════════════════════════════ -->
+<div id="pg-zen" class="page">
+  <div class="pg-wrap">
+    <div class="pg-num">11</div>
+    <div class="pg-hero rv"><span class="eyebrow">Practice Eleven</span>
+      <h1 class="disp-title" style="margin-bottom:1rem;">Zen Stone <em>Garden</em></h1>
+      <p class="body-txt">Arrange stones and rake peaceful patterns in sand. The Japanese art of karesansui — bringing order and beauty to create inner stillness.</p>
+    </div>
+    <div class="zen-layout rv r2">
+      <canvas id="zenCanvas" width="640" height="420"></canvas>
+      <div class="zen-tools">
+        <span class="zen-tool-label">Tools</span>
+        <button class="z-tool active" id="zt-rake" onclick="setZenTool('rake',this)"><span class="z-icon">〰️</span>Rake</button>
+        <button class="z-tool" id="zt-stone" onclick="setZenTool('stone',this)"><span class="z-icon">🪨</span>Place Stone</button>
+        <button class="z-tool" id="zt-erase" onclick="setZenTool('erase',this)"><span class="z-icon">✕</span>Remove</button>
+        <span class="zen-tool-label" style="margin-top:1rem;">Stone Shape</span>
+        <div class="stone-picker">
+          <div class="stone-opt active" onclick="setStone('🪨',this)">🪨</div>
+          <div class="stone-opt" onclick="setStone('⚪',this)">⚪</div>
+          <div class="stone-opt" onclick="setStone('🌸',this)">🌸</div>
+          <div class="stone-opt" onclick="setStone('🌿',this)">🌿</div>
+          <div class="stone-opt" onclick="setStone('💎',this)">💎</div>
+          <div class="stone-opt" onclick="setStone('🌙',this)">🌙</div>
+        </div>
+        <button class="z-tool" style="margin-top:1rem;" onclick="clearZen()"><span class="z-icon">🗑</span>Clear All</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ─── CURSOR ─── */
+const cDot=document.getElementById('cDot'),cRing=document.getElementById('cRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cDot.style.left=mx+'px';cDot.style.top=my+'px';});
+(function animCursor(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cRing.style.left=rx+'px';cRing.style.top=ry+'px';requestAnimationFrame(animCursor);})();
+document.addEventListener('mousedown',()=>{cDot.style.transform='translate(-50%,-50%) scale(1.8)';cRing.style.transform='translate(-50%,-50%) scale(.8)';});
+document.addEventListener('mouseup',()=>{cDot.style.transform='translate(-50%,-50%) scale(1)';cRing.style.transform='translate(-50%,-50%) scale(1)';});
+
+/* ─── PARTICLES ─── */
+(function(){const w=document.getElementById('particles');for(let i=0;i<20;i++){const p=document.createElement('div');const s=1.5+Math.random()*3;p.style.cssText=`position:absolute;border-radius:50%;width:${s}px;height:${s}px;left:${Math.random()*100}%;bottom:-10px;background:rgba(189,224,254,${.18+Math.random()*.35});animation:pRise ${11+Math.random()*16}s linear infinite;animation-delay:-${Math.random()*18}s;`;w.appendChild(p);}const st=document.createElement('style');st.textContent='@keyframes pRise{0%{transform:translateY(0);opacity:0;}8%{opacity:1;}92%{opacity:.5;}100%{transform:translateY(-100vh);opacity:0;}}';document.head.appendChild(st);})();
+
+/* ─── SIDEBAR ─── */
+const sidebar=document.getElementById('sidebar'),peekBtn=document.getElementById('peekBtn');
+const sbScroll=document.getElementById('sbScroll'),sbUp=document.getElementById('sbUp'),sbDown=document.getElementById('sbDown');
+peekBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');document.body.classList.toggle('sidebar-open');});
+document.addEventListener('click',e=>{if(sidebar.classList.contains('open')&&!sidebar.contains(e.target)&&e.target!==peekBtn&&!peekBtn.contains(e.target)){sidebar.classList.remove('open');document.body.classList.remove('sidebar-open');}});
+sbUp.addEventListener('click',()=>sbScroll.scrollBy({top:-180,behavior:'smooth'}));
+sbDown.addEventListener('click',()=>sbScroll.scrollBy({top:180,behavior:'smooth'}));
+
+/* ─── PAGE NAVIGATION ─── */
+let currentPage='welcome';
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='none';});
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));
+  const pg=document.getElementById('pg-'+id);
+  if(pg){pg.classList.add('active');pg.style.display='block';}
+  document.querySelectorAll('.sb-link').forEach(l=>{if(l.getAttribute('onclick')&&l.getAttribute('onclick').includes("'"+id+"'"))l.classList.add('active');});
+  currentPage=id;
+  window.scrollTo({top:0,behavior:'smooth'});
+  sidebar.classList.remove('open');document.body.classList.remove('sidebar-open');
+  // Init page-specific logic
+  setTimeout(()=>{
+    revealAll();
+    if(id==='hub'){const h=new Date().getHours();const g=h<12?'Good Morning':h<17?'Good Afternoon':h<21?'Good Evening':'Good Night';document.getElementById('hubGreeting').textContent='✦ '+g;}
+    if(id==='candle')initCandle();
+    if(id==='pond')initPond();
+    if(id==='bowl')initBowl();
+    if(id==='jigsaw')initJigsaw();
+    if(id==='zen')initZen();
+  },80);
+}
+function revealAll(){document.querySelectorAll('.rv').forEach(el=>{const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});},{threshold:.08});obs.observe(el);el.classList.add('on');});}
+
+// Init welcome scene
+(function(){
+  const starsEl=document.getElementById('stars');
+  for(let i=0;i<200;i++){const s=document.createElement('div');const sz=.5+Math.random()*2;s.style.cssText=`position:absolute;border-radius:50%;width:${sz}px;height:${sz}px;top:${Math.random()*68}%;left:${Math.random()*100}%;background:#fff;opacity:${.15+Math.random()*.85};animation:stTwi ${1.5+Math.random()*4}s ease-in-out infinite alternate;animation-delay:${Math.random()*6}s;`;starsEl.appendChild(s);}
+  const st=document.createElement('style');st.textContent='@keyframes stTwi{from{opacity:.08;}to{opacity:1;}}';document.head.appendChild(st);
+  // Mountains
+  const mts=document.getElementById('mountains');
+  [{l:'0%',w:'40%',h:'220px',c:'#020508'},{l:'14%',w:'32%',h:'250px',c:'#030810'},{l:'36%',w:'30%',h:'195px',c:'#020508'},{l:'50%',w:'38%',h:'225px',c:'#030810'},{l:'70%',w:'32%',h:'190px',c:'#020508'}].forEach(d=>{const el=document.createElement('div');el.className='mt';el.style.cssText=`left:${d.l};width:${d.w};height:${d.h};background:${d.c};`;mts.appendChild(el);});
+  // Trees
+  const trs=document.getElementById('trees');
+  for(let i=0;i<28;i++){const el=document.createElement('div');el.className='pine';const h=42+Math.random()*95;el.style.cssText=`width:${h*.42}px;height:${h}px;opacity:${.7+Math.random()*.3};`;trs.appendChild(el);}
+  // Lake ripples
+  const lk=document.getElementById('lake');
+  for(let i=0;i<12;i++){const r=document.createElement('div');r.className='wrpl';r.style.cssText=`bottom:${i*13}px;animation-duration:${3.5+Math.random()*5}s;animation-delay:-${Math.random()*6}s;`;lk.appendChild(r);}
+  revealAll();
+})();
+
+/* ═══════════════════════════════
+   02. BREATHING
+═══════════════════════════════ */
+const BCIRC=816;let bRunning=false,bPhaseIdx=0,bCycles=0,bTO=null;
+const bTechs={
+  box:[{label:'Breathe In…',hint:'4 counts — let your lungs fill gently',dur:4000,expand:true},{label:'Hold…',hint:'Hold softly — feel the fullness',dur:4000},{label:'Breathe Out…',hint:'4 counts — release everything',dur:4000,contract:true},{label:'Hold…',hint:'Rest in the stillness',dur:4000}],
+  '478':[{label:'Breathe In…',hint:'4 counts through the nose',dur:4000,expand:true},{label:'Hold…',hint:'Hold for 7 counts',dur:7000},{label:'Breathe Out…',hint:'Exhale fully for 8 counts',dur:8000,contract:true}],
+  coherent:[{label:'Breathe In…',hint:'5 counts — slow and natural',dur:5000,expand:true},{label:'Breathe Out…',hint:'5 counts — smooth and even',dur:5000,contract:true}],
+};
+let bTech=bTechs.box;
+function selectTech(el,key){document.querySelectorAll('.tech-item').forEach(t=>t.classList.remove('sel'));el.classList.add('sel');bTech=bTechs[key];if(bRunning){bRunning=false;clearTimeout(bTO);resetBreath();}}
+function toggleBreath(){bRunning=!bRunning;document.getElementById('breathBtn').textContent=bRunning?'Pause':'Resume';if(bRunning)runBPhase();else clearTimeout(bTO);}
+function runBPhase(){if(!bRunning)return;const p=bTech[bPhaseIdx%bTech.length];document.getElementById('bLabel').textContent=p.label;document.getElementById('bHint').textContent=p.hint;const core=document.getElementById('orbCore');core.className='orb-core'+(p.expand?' expanding':p.contract?' contracting':'');const ring=document.getElementById('pRing');ring.style.transition='none';ring.style.strokeDashoffset=BCIRC;void ring.offsetWidth;ring.style.transition=`stroke-dashoffset ${p.dur/1000}s linear`;ring.style.strokeDashoffset='0';bPhaseIdx++;if(bPhaseIdx%bTech.length===0){bCycles++;document.getElementById('bCycles').textContent=`Cycles completed: ${bCycles}`;}bTO=setTimeout(runBPhase,p.dur);}
+function resetBreath(){bRunning=false;bPhaseIdx=0;bCycles=0;clearTimeout(bTO);document.getElementById('breathBtn').textContent='Begin';document.getElementById('bLabel').textContent='Ready to begin';document.getElementById('bHint').textContent='Choose a technique and press Begin';document.getElementById('bCycles').textContent='Cycles completed: 0';document.getElementById('orbCore').className='orb-core';document.getElementById('pRing').style.strokeDashoffset=BCIRC;}
+
+/* ═══════════════════════════════
+   03. TIMER
+═══════════════════════════════ */
+const TCIRC=898;let tMin=2,tSec=0,tTotal=120,tElapsed=0,tRunning=false,tInterval=null;
+const tAffs=[{t:'"Close your eyes. Let your breath become your anchor."',c:'— Begin when ready'},{t:'"Each breath is a gentle homecoming."',c:'— Ancient wisdom'},{t:'"You are held. You are safe. You are at rest."',c:'— A quiet truth'},{t:'"Silence is not empty — it is full of answers."',c:'— Lao Tzu'},{t:'"The present moment is where peace lives."',c:'— Mindfulness teaching'},{t:'"Let go. You have nowhere to be but here."',c:'— A gift of stillness'}];
+let tAffIdx=0;
+function setDur(m,el){resetTimer();tMin=m;tSec=0;tTotal=m*60;tElapsed=0;updTDisp();document.querySelectorAll('.preset-item').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+function updTDisp(){document.getElementById('tDigits').textContent=String(tMin).padStart(2,'0')+':'+String(tSec).padStart(2,'0');document.getElementById('clockRing').style.strokeDashoffset=TCIRC*(1-tElapsed/tTotal);}
+function toggleTimer(){tRunning=!tRunning;const b=document.getElementById('timerBtn');b.textContent=tRunning?'⏸ Pause':'▶ Resume';document.getElementById('tPhase').textContent=tRunning?'Resting in stillness…':'Paused';if(tRunning){if(document.getElementById('bellTog').classList.contains('on'))chime(false);tInterval=setInterval(()=>{if(tSec===0){if(tMin===0){clearInterval(tInterval);tRunning=false;b.textContent='▶ Begin';document.getElementById('tDigits').textContent='✦';document.getElementById('tPhase').textContent='';document.getElementById('doneMsg').classList.add('show');if(document.getElementById('bellTog').classList.contains('on'))chime(true);return;}tMin--;tSec=59;}else tSec--;tElapsed++;updTDisp();if(tElapsed%60===0)rotTAff();},1000);}else clearInterval(tInterval);}
+function resetTimer(){clearInterval(tInterval);tRunning=false;tElapsed=0;tSec=0;document.getElementById('timerBtn').textContent='▶ Begin';document.getElementById('tPhase').textContent='Select a duration';document.getElementById('clockRing').style.strokeDashoffset=TCIRC;document.getElementById('doneMsg').classList.remove('show');updTDisp();}
+function rotTAff(){const a=tAffs[tAffIdx%tAffs.length];tAffIdx++;const p=document.getElementById('tAffText');p.style.opacity=0;setTimeout(()=>{p.textContent=a.t;document.getElementById('tAffCite').textContent=a.c;p.style.opacity=1;},380);}
+function chime(triple){try{const ac=new(window.AudioContext||window.webkitAudioContext)();(triple?[0,.9,1.8]:[0]).forEach(t=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=528;g.gain.setValueAtTime(.35,ac.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+t+2.8);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+t);o.stop(ac.currentTime+t+3);});}catch(e){}}
+// Timer tick marks
+(function(){const svg=document.getElementById('clockTickSvg');if(!svg)return;for(let i=0;i<60;i++){const a=(i/60)*360-90,r=a*Math.PI/180,r1=i%5===0?133:137,r2=143,cx=150,cy=150;const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('x1',cx+r1*Math.cos(r));line.setAttribute('y1',cy+r1*Math.sin(r));line.setAttribute('x2',cx+r2*Math.cos(r));line.setAttribute('y2',cy+r2*Math.sin(r));line.setAttribute('stroke',i%5===0?'rgba(189,224,254,.18)':'rgba(189,224,254,.07)');line.setAttribute('stroke-width',i%5===0?'2':'1');svg.appendChild(line);}})();
+
+/* ═══════════════════════════════
+   04. SOUNDS
+═══════════════════════════════ */
+let actx=null,activeSoundNode=null,activeSoundCard=null,globalVol=.55;
+function getACtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
+function mkNoise(type,freq,q,gain){const c=getACtx();const buf=c.createBuffer(1,c.sampleRate*4,c.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const src=c.createBufferSource();src.buffer=buf;src.loop=true;const f=c.createBiquadFilter();f.type=type;f.frequency.value=freq;if(q)f.Q.value=q;const g=c.createGain();g.gain.value=gain*globalVol;src.connect(f);f.connect(g);g.connect(c.destination);src.start();return{src,gn:g};}
+function mkForest(){const c=getACtx();const base=mkNoise('bandpass',1400,.4,.15);const iv=setInterval(()=>{if(!actx){clearInterval(iv);return;}[1800,2200,2600,1600,2000].slice(0,2+Math.floor(Math.random()*3)).forEach((fr,i)=>{const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=fr+Math.random()*300;const t=c.currentTime+i*.18+Math.random()*.35;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.07*globalVol,t+.04);g.gain.exponentialRampToValueAtTime(.001,t+.32);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.38);});},1800+Math.random()*1000);const orig=base.src.stop.bind(base.src);base.src.stop=()=>{clearInterval(iv);orig();};return base;}
+function mkWind(){const c=getACtx();const g=c.createGain();g.gain.value=globalVol*.38;g.connect(c.destination);const ns=[];[180,300,450].forEach(fr=>{const buf=c.createBuffer(1,c.sampleRate*4,c.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const src=c.createBufferSource();src.buffer=buf;src.loop=true;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=fr;const lg=c.createGain();lg.gain.value=.35;src.connect(f);f.connect(lg);lg.connect(g);src.start();ns.push(src);});return{src:{stop:()=>ns.forEach(n=>{try{n.stop();}catch(e){}})},gn:g};}
+const sFns={rain:()=>mkNoise('highpass',580,.4,.5),ocean:()=>mkNoise('bandpass',220,1.8,.44),forest:mkForest,fire:()=>mkNoise('bandpass',88,2.2,.38),wind:mkWind};
+function playSound(name,card){if(activeSoundNode){try{activeSoundNode.src.stop();}catch(e){}activeSoundNode=null;}if(activeSoundCard){activeSoundCard.classList.remove('playing');const pn=activeSoundCard.id.replace('sc-','');const st=document.getElementById('ss-'+pn);if(st)st.textContent='Tap to play';if(activeSoundCard===card){activeSoundCard=null;return;}}const node=sFns[name]();activeSoundNode=node;activeSoundCard=card;card.classList.add('playing');const st=document.getElementById('ss-'+name);if(st)st.textContent='♪ Playing…';}
+function setVol(inp){globalVol=inp.value/100;document.getElementById('volVal').textContent=inp.value;if(activeSoundNode)activeSoundNode.gn.gain.value=globalVol;inp.style.background=`linear-gradient(to right,rgba(189,224,254,.58) 0%,rgba(189,224,254,.58) ${inp.value}%,rgba(189,224,254,.1) ${inp.value}%)`;}
+
+/* ═══════════════════════════════
+   05. CANDLE MEDITATION
+═══════════════════════════════ */
+let candleCtx,candleAnim,candleDimmed=false,candleWind=false,cFlicker=0;
+function initCandle(){const canvas=document.getElementById('candleCanvas');if(!canvas||canvas._init)return;canvas._init=true;candleCtx=canvas.getContext('2d');drawCandle();}
+function drawCandle(){const c=candleCtx,W=420,H=380;c.clearRect(0,0,W,H);// Dark bg
+c.fillStyle='#030812';c.fillRect(0,0,W,H);
+// Candle body
+const cX=210,cY=290,cW=40,cH=140;const cGrad=c.createLinearGradient(cX-cW/2,0,cX+cW/2,0);cGrad.addColorStop(0,'#D4B896');cGrad.addColorStop(.35,'#F5DFC0');cGrad.addColorStop(.7,'#E8CDA8');cGrad.addColorStop(1,'#C4A880');c.fillStyle=cGrad;c.beginPath();c.roundRect(cX-cW/2,cY-cH,cW,cH,4);c.fill();
+// Wax drips
+[[cX-14,cY-cH+15,6,22],[cX+10,cY-cH+8,5,18]].forEach(([x,y,w,h])=>{c.fillStyle='rgba(245,223,192,.7)';c.beginPath();c.ellipse(x,y+h,w,5,0,0,Math.PI*2);c.fill();c.fillRect(x-w,y,w*2,h);});
+// Wick
+c.strokeStyle='#8B7355';c.lineWidth=2;c.beginPath();c.moveTo(cX,cY-cH);c.lineTo(cX+Math.sin(cFlicker*.08)*3,cY-cH-14);c.stroke();
+// Flame — multi-layer
+const windOff=candleWind?Math.sin(Date.now()*.003)*18:0;const flk=Math.sin(cFlicker*.12)*5+Math.sin(cFlicker*.07)*3;const fX=cX+windOff*.4,fY=cY-cH-14;
+// Outer glow
+const outerG=c.createRadialGradient(fX,fY,0,fX,fY,90);outerG.addColorStop(0,'rgba(255,180,60,.22)');outerG.addColorStop(.5,'rgba(255,120,20,.08)');outerG.addColorStop(1,'transparent');c.fillStyle=outerG;c.beginPath();c.ellipse(fX,fY+10,90,80,0,0,Math.PI*2);c.fill();
+// Main flame body
+const mG=c.createRadialGradient(fX,fY+18,2,fX,fY,55);mG.addColorStop(0,'rgba(255,255,240,.98)');mG.addColorStop(.15,'rgba(255,240,180,.95)');mG.addColorStop(.4,'rgba(255,170,40,.85)');mG.addColorStop(.7,'rgba(255,90,10,.6)');mG.addColorStop(1,'transparent');c.fillStyle=mG;c.beginPath();c.moveTo(fX,fY-50+flk+windOff*.2);c.bezierCurveTo(fX+14+flk*.5+windOff*.3,fY-20,fX+18+windOff*.4,fY+20,fX,fY+30);c.bezierCurveTo(fX-18+windOff*.2,fY+20,fX-14+flk*.5+windOff*.1,fY-20,fX,fY-50+flk+windOff*.2);c.fill();
+// Inner white core
+const iG=c.createRadialGradient(fX,fY+10,0,fX,fY+5,18);iG.addColorStop(0,'rgba(255,255,255,.98)');iG.addColorStop(.5,'rgba(255,255,220,.8)');iG.addColorStop(1,'transparent');c.fillStyle=iG;c.beginPath();c.ellipse(fX,fY+8,10,18,0,0,Math.PI*2);c.fill();
+// Floor reflection
+const refG=c.createRadialGradient(cX,H,0,cX,H,180);refG.addColorStop(0,'rgba(255,140,30,.07)');refG.addColorStop(1,'transparent');c.fillStyle=refG;c.fillRect(0,0,W,H);
+// Ambient room glow
+c.fillStyle=`rgba(255,120,30,${candleDimmed?.06:.03})`;c.fillRect(0,0,W,H);
+cFlicker++;candleAnim=requestAnimationFrame(drawCandle);}
+function toggleCandle(btn){candleDimmed=!candleDimmed;btn.textContent=candleDimmed?'Brighten room':'Dim the room';document.getElementById('pg-candle').style.background=candleDimmed?'rgba(2,4,8,.95)':'';}
+function toggleCandleWind(){candleWind=!candleWind;}
+
+/* ═══════════════════════════════
+   06. RIPPLE POND
+═══════════════════════════════ */
+let pondCtx,pondRipples=[],pondAnim2,pondBg;
+function initPond(){const canvas=document.getElementById('pondCanvas');if(!canvas||canvas._init)return;canvas._init=true;
+const W=canvas.width,H=canvas.height;pondCtx=canvas.getContext('2d');
+// Responsive
+const wrap=canvas.parentElement;const maxW=wrap.offsetWidth-40;if(W>maxW){const s=maxW/W;canvas.style.width=maxW+'px';canvas.style.height=(H*s)+'px';}
+// Create pond bg gradient
+pondBg=pondCtx.createLinearGradient(0,0,0,H);pondBg.addColorStop(0,'#061828');pondBg.addColorStop(.4,'#0A2240');pondBg.addColorStop(1,'#040C1A');
+// Events
+function getPondPos(e){const r=canvas.getBoundingClientRect();const scaleX=canvas.width/r.width;const scaleY=canvas.height/r.height;const src=e.touches?e.touches[0]:e;return{x:(src.clientX-r.left)*scaleX,y:(src.clientY-r.top)*scaleY};}
+canvas.addEventListener('click',e=>{const p=getPondPos(e);addRipple(p.x,p.y);});
+canvas.addEventListener('touchstart',e=>{e.preventDefault();Array.from(e.touches).forEach(t=>{const r2=canvas.getBoundingClientRect();addRipple((t.clientX-r2.left)*(canvas.width/r2.width),(t.clientY-r2.top)*(canvas.height/r2.height));});},{passive:false});
+drawPond();}
+function addRipple(x,y){pondRipples.push({x,y,r:2,maxR:160,opacity:1,speed:1.8+Math.random()*.8,hue:200+Math.random()*30});}
+function drawPond(){const c=pondCtx,W=700,H=420;
+// Background
+c.fillStyle=pondBg;c.fillRect(0,0,W,H);
+// Stars reflected
+c.fillStyle='rgba(189,224,254,.08)';for(let i=0;i<35;i++){const sx=(Math.sin(i*2.3)*400+400)%W;const sy=(Math.cos(i*1.7)*200+200)%H;c.beginPath();c.arc(sx,sy,1+Math.sin(Date.now()*.001+i)*.5,0,Math.PI*2);c.fill();}
+// Moon reflection
+const moonRefY=H*.7+Math.sin(Date.now()*.0008)*4;const mG=c.createRadialGradient(W/2,moonRefY,0,W/2,moonRefY,55);mG.addColorStop(0,'rgba(189,224,254,.35)');mG.addColorStop(.5,'rgba(189,224,254,.1)');mG.addColorStop(1,'transparent');c.fillStyle=mG;c.beginPath();c.ellipse(W/2,moonRefY,55,22,0,0,Math.PI*2);c.fill();
+// Lily pads
+[[120,300,28],[560,340,22],[350,390,18],[80,200,16],[620,180,20]].forEach(([lx,ly,lr])=>{c.fillStyle='rgba(40,110,55,.55)';c.beginPath();c.arc(lx,ly,lr,0,Math.PI*2);c.fill();c.strokeStyle='rgba(60,140,70,.3)';c.lineWidth=1;c.stroke();c.fillStyle='rgba(220,60,80,.6)';c.beginPath();c.arc(lx+lr*.2,ly-lr*.2,3,0,Math.PI*2);c.fill();});
+// Ripples
+pondRipples=pondRipples.filter(rp=>rp.opacity>.02);pondRipples.forEach(rp=>{for(let k=0;k<3;k++){const kr=rp.r-k*22;if(kr<0)continue;c.beginPath();c.arc(rp.x,rp.y,kr,0,Math.PI*2);c.strokeStyle=`hsla(${rp.hue},80%,78%,${rp.opacity*(1-k*.3)})`;c.lineWidth=1.5-k*.3;c.stroke();}rp.r+=rp.speed;rp.opacity-=.007;});
+// Surface shimmer
+c.fillStyle='rgba(189,224,254,.025)';for(let i=0;i<8;i++){const sw=(Math.sin(Date.now()*.001+i*1.5)*200+250)%W;const sy2=40+i*50+Math.sin(Date.now()*.0005+i)*10;c.fillRect(sw,sy2,30+Math.random()*40,1);}
+requestAnimationFrame(drawPond);}
+
+/* ═══════════════════════════════
+   07. SINGING BOWL
+═══════════════════════════════ */
+let bowlCtx2,bowlStruck=false,bowlDecay=0;
+function initBowl(){const canvas=document.getElementById('bowlCanvas');if(!canvas||canvas._init)return;canvas._init=true;bowlCtx2=canvas.getContext('2d');drawBowl();}
+function drawBowl(){if(!bowlCtx2)return;const c=bowlCtx2,W=280,H=280,cx=140,cy=145;c.clearRect(0,0,W,H);
+// Bowl shadow
+const shG=c.createRadialGradient(cx,cy+70,5,cx,cy+70,90);shG.addColorStop(0,'rgba(0,0,0,.4)');shG.addColorStop(1,'transparent');c.fillStyle=shG;c.beginPath();c.ellipse(cx,cy+70,88,22,0,0,Math.PI*2);c.fill();
+// Bowl body gradient
+const bG=c.createLinearGradient(cx-85,cy-20,cx+85,cy+60);bG.addColorStop(0,'#4A3828');bG.addColorStop(.2,'#8B6E4A');bG.addColorStop(.45,'#C4A070');bG.addColorStop(.6,'#A07848');bG.addColorStop(.8,'#7A5830');bG.addColorStop(1,'#4A3020');c.fillStyle=bG;c.beginPath();c.moveTo(cx-85,cy-20);c.bezierCurveTo(cx-90,cy+20,cx-75,cy+68,cx-45,cy+72);c.bezierCurveTo(cx-20,cy+76,cx+20,cy+76,cx+45,cy+72);c.bezierCurveTo(cx+75,cy+68,cx+90,cy+20,cx+85,cy-20);c.closePath();c.fill();
+// Inner bowl
+const iG=c.createRadialGradient(cx,cy+30,5,cx,cy+25,70);iG.addColorStop(0,'#2A1A0A');iG.addColorStop(.5,'#3D2810');iG.addColorStop(1,'#5A3A18');c.fillStyle=iG;c.beginPath();c.ellipse(cx,cy+20,72,28,0,0,Math.PI*2);c.fill();
+// Rim highlight
+const rG=c.createLinearGradient(cx-85,cy-20,cx+85,cy-20);rG.addColorStop(0,'rgba(200,160,100,.3)');rG.addColorStop(.3,'rgba(255,220,160,.8)');rG.addColorStop(.7,'rgba(255,220,160,.6)');rG.addColorStop(1,'rgba(180,130,70,.3)');c.fillStyle=rG;c.beginPath();c.ellipse(cx,cy-20,85,14,0,0,Math.PI*2);c.fill();
+// Engraved rings
+[12,22,32].forEach(offset=>{c.beginPath();c.ellipse(cx,cy-20+offset*.8,85-offset*.2,14-offset*.15,0,0,Math.PI*2);c.strokeStyle=`rgba(100,70,30,${.4-offset*.01})`;c.lineWidth=.8;c.stroke();});
+// Vibration glow when struck
+if(bowlStruck&&bowlDecay>0){const glow=c.createRadialGradient(cx,cy+20,0,cx,cy+20,100);glow.addColorStop(0,`rgba(189,224,254,${bowlDecay*.3})`);glow.addColorStop(.5,`rgba(189,224,254,${bowlDecay*.12})`);glow.addColorStop(1,'transparent');c.fillStyle=glow;c.beginPath();c.arc(cx,cy+20,100,0,Math.PI*2);c.fill();bowlDecay-=.008;}
+// Mallet
+const mG2=c.createLinearGradient(200,80,230,130);mG2.addColorStop(0,'#8B6840');mG2.addColorStop(.5,'#C4A060');mG2.addColorStop(1,'#7A5020');c.fillStyle=mG2;c.beginPath();c.roundRect(198,60,14,80,7);c.fill();c.fillStyle='#6A4830';c.beginPath();c.ellipse(205,60,10,10,0,0,Math.PI*2);c.fill();
+requestAnimationFrame(drawBowl);}
+function strikeBowl(){bowlStruck=true;bowlDecay=1;document.getElementById('bowlVis').classList.add('bowl-struck');document.getElementById('bowlStatus').textContent='♪ Resonating at 432 Hz…';setTimeout(()=>{document.getElementById('bowlVis').classList.remove('bowl-struck');document.getElementById('bowlStatus').textContent='Tap the bowl to begin';bowlStruck=false;},5000);try{const ac=new(window.AudioContext||window.webkitAudioContext)();[[432,.45],[864,.18],[1296,.08]].forEach(([freq,gain],i)=>{const o=ac.createOscillator(),g=ac.createGain(),reverb=ac.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(gain,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+6+i);o.connect(g);g.connect(reverb);reverb.gain.value=.85;reverb.connect(ac.destination);o.start(ac.currentTime);o.stop(ac.currentTime+6.1+i);});}catch(e){}}
+
+/* ═══════════════════════════════
+   08. AFFIRMATIONS
+═══════════════════════════════ */
+const affData={calm:[{t:'"You are safe. Right here, right now, all is calm.',em:'🌊',s:'— A gentle reminder'},{t:'"Let your breath be your ocean — each exhale carries worry far away."',em:'🌊',s:'— Mindfulness teaching'},{t:'"In this quiet moment, everything is exactly as it should be."',em:'💙',s:'— Ancient wisdom'},{t:'"The sky does not rush. The river does not force. Neither do you."',em:'🕊️',s:'— A truth from nature'}],love:[{t:'"You are loved more than words will ever say. Your presence is a gift."',em:'❤️',s:'— Always true'},{t:'"The love you have given leaves a light in every heart it has touched."',em:'💛',s:'— A beautiful truth'},{t:'"You are never alone. Caring hands and warm hearts surround you."',em:'🤗',s:'— A promise of care'},{t:'"Your life has been a story of love — and that story continues today."',em:'🌺',s:'— For precious souls'}],identity:[{t:'"Who you are runs deeper than any memory. Your soul remains whole."',em:'🌟',s:'— A gentle truth'},{t:'"You are seen. You are known. You are valued beyond measure."',em:'💫',s:'— Always and forever'},{t:'"Your wisdom, your warmth, your kindness — these are yours, always."',em:'🌿',s:'— Honouring your journey'},{t:'"Every day you have lived has shaped something beautiful."',em:'📖',s:'— For those who carry history'}],courage:[{t:'"You have already overcome every difficult day so far. That is real courage."',em:'💪',s:'— For brave hearts'},{t:'"Being gentle with yourself is the greatest strength there is."',em:'🌸',s:'— Quiet courage'},{t:'"One breath at a time. One moment at a time. That is enough."',em:'👣',s:'— For weary travellers'},{t:'"You are stronger than you know, and braver than you feel."',em:'🌱',s:'— A courageous truth'}]};
+const catNames={calm:'Calm & Peace',love:'Love & Belonging',identity:'Identity & Worth',courage:'Strength & Courage'};
+let curCat='calm',curAffIdx=0;
+function selCat(btn,cat){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');curCat=cat;curAffIdx=0;showAff();}
+function nextAff(){curAffIdx++;showAff();}
+function showAff(){const list=affData[curCat];const a=list[curAffIdx%list.length];const el=document.getElementById('affText');el.style.opacity=0;el.style.transform='translateY(8px)';setTimeout(()=>{document.getElementById('affEmoji').textContent=a.em;document.getElementById('affCat').textContent=catNames[curCat];el.textContent=a.t;document.getElementById('affSrc').textContent=a.s;el.style.opacity=1;el.style.transform='none';},320);}
+
+/* ═══════════════════════════════
+   09. MIND ACTIVITIES
+═══════════════════════════════ */
+// Journal
+function insertPrompt(t){const ta=document.getElementById('journalTA');ta.value=ta.value?ta.value+'\n'+t:t;ta.focus();}
+function saveJournal(){if(!document.getElementById('journalTA').value.trim())return;const m=document.getElementById('savedMsg');m.style.display='block';setTimeout(()=>m.style.display='none',3500);}
+// Colour breathing
+let colRunning=false,colTO2=null,colIdx2=0;
+const cols=[{bg:'radial-gradient(circle,#BDE0FE,#2563A8)',shadow:'rgba(189,224,254,.5)',label:'Breathe in calm blue…',sub:'Fill with peace'},{bg:'radial-gradient(circle,#D5F5E3,#27AE60)',shadow:'rgba(100,200,130,.5)',label:'Hold the green…',sub:'Let it nourish you'},{bg:'radial-gradient(circle,#FDEBD0,#E59866)',shadow:'rgba(230,180,100,.4)',label:'Breathe out golden warmth…',sub:'Release all tension'},{bg:'radial-gradient(circle,#E8DAEF,#8E44AD)',shadow:'rgba(180,130,210,.4)',label:'Hold the violet…',sub:'Feel the deep stillness'}];
+function toggleColour(btn){colRunning=!colRunning;btn.textContent=colRunning?'Pause':'Begin Colour Breath';if(colRunning)runCol();else clearTimeout(colTO2);}
+function runCol(){if(!colRunning)return;const c=cols[colIdx2%cols.length];const orb=document.getElementById('colOrb');orb.style.background=c.bg;orb.style.boxShadow=`0 0 80px ${c.shadow}`;orb.style.transform=colIdx2%2===0?'scale(1.55)':'scale(1)';document.getElementById('colLabel').textContent=c.label;document.getElementById('colSub').textContent=c.sub;colIdx2++;colTO2=setTimeout(runCol,4200);}
+// Word recall
+const words=[{w:'Garden',p:'What flowers do you remember growing up?'},{w:'Sunday',p:'What did Sundays feel like when you were young?'},{w:'Kitchen',p:'What smells remind you of home?'},{w:'Laughter',p:'What is a sound that always made you happy?'},{w:'Morning',p:'What did a perfect morning feel like to you?'},{w:'Friendship',p:'Think of someone who always made you smile.'},{w:'Music',p:'Is there a song that takes you somewhere beautiful?'},{w:'Hands',p:'Think of hands that have held yours with love.'},{w:'Seaside',p:'Can you hear the waves? Feel the sand?'},{w:'Home',p:'Close your eyes — where feels like home?'},{w:'Moonlight',p:'Think of a night sky that took your breath away.'},{w:'Birdsong',p:'What birds did you hear as a child?'}];
+let wordIdx=0;
+function showWord(){const w=words[wordIdx%words.length];document.getElementById('wordBox').textContent=w.w;document.getElementById('wordPrompt').textContent=w.p;}
+function nextWord(){wordIdx++;document.getElementById('wordBox').textContent='Press to reveal a word';document.getElementById('wordPrompt').textContent='';}
+// Body scan
+const scanSteps=['Find a comfortable position. Close your eyes if you wish. Take one slow, deep breath in… and out.','Bring awareness to the top of your head. Let your scalp soften. There is no tension here.','Let your forehead smooth out. Release your eyebrows, your eyes, your cheeks. Let your jaw gently drop open.','Feel your neck and shoulders. With each breath out, let them drop a little lower than before.','Bring awareness to your chest. Feel it rise and fall. Each breath is gentle and completely natural.','Notice your arms — your elbows, your wrists, your hands. Let your fingers uncurl softly.','Your stomach and lower back — let them soften completely with each slow breath out.','Feel your hips and the weight of your body, fully supported. You don\'t need to hold anything.','Your legs, your knees, your calves — feel them heavy and warm, resting completely.','Your feet, your toes. Let them relax entirely. Your whole body is soft, warm and at peace.','Rest here for as long as you wish. Your whole body is at peace. You are safe. You are well. You are home.'];
+let scanRunning=false,scanIdx=0,scanTO2=null;
+function toggleScan(){scanRunning=!scanRunning;document.getElementById('scanBtn').textContent=scanRunning?'Pause':'Resume';if(scanRunning)runScan();else clearTimeout(scanTO2);}
+function runScan(){if(!scanRunning)return;if(scanIdx>=scanSteps.length){scanRunning=false;document.getElementById('scanBtn').textContent='Complete ✓';return;}document.getElementById('scanBox').textContent=scanSteps[scanIdx];document.getElementById('scanProg').textContent=`Step ${scanIdx+1} of ${scanSteps.length}`;scanIdx++;scanTO2=setTimeout(runScan,9000);}
+function resetScan(){clearTimeout(scanTO2);scanRunning=false;scanIdx=0;document.getElementById('scanBtn').textContent='Begin Scan';document.getElementById('scanBox').textContent='Press Begin to start your body scan journey.';document.getElementById('scanProg').textContent='Step 0 of 11';}
+
+/* ═══════════════════════════════
+   10. JIGSAW PUZZLE
+═══════════════════════════════ */
+const puzzles=[
+  {name:'Cherry Blossom',emojis:['🌸','🌿','🌸','🌸','🦋','🌸','🌿','🌸','🌿']},
+  {name:'Ocean Life',emojis:['🐚','🌊','🐠','🌊','🐋','🌊','🐙','🌊','🐚']},
+  {name:'Forest Friends',emojis:['🌲','🐦','🌲','🦊','🍄','🐿️','🌲','🌿','🌲']},
+  {name:'Night Sky',emojis:['⭐','🌙','✨','🌟','🌙','⭐','✨','⭐','🌙']},
+];
+let curPuzzle=0,boardState=[],selectedPiece=null,jMoves=0,trayState=[];
+function initJigsaw(){curPuzzle=Math.floor(Math.random()*puzzles.length);const p=puzzles[curPuzzle];boardState=Array(9).fill(null);trayState=[...p.emojis].sort(()=>Math.random()-.5);selectedPiece=null;jMoves=0;renderBoard();renderTray();document.getElementById('jigMoves').textContent='Moves: 0';document.getElementById('winMsg').classList.remove('show');}
+function renderBoard(){const b=document.getElementById('puzzleBoard');b.innerHTML='';const p=puzzles[curPuzzle];for(let i=0;i<9;i++){const cell=document.createElement('div');cell.className='puzzle-piece'+(boardState[i]?' placed':'');cell.style.width='104px';cell.style.height='104px';if(boardState[i]){cell.textContent=boardState[i];cell.style.fontSize=boardState[i]===p.emojis[i]?'2.4rem':'2rem';cell.style.background=boardState[i]===p.emojis[i]?'rgba(189,224,254,.1)':'rgba(4,12,26,.7)';}else{cell.textContent='+';cell.style.color='rgba(189,224,254,.15)';cell.style.fontSize='1.5rem';cell.onclick=()=>placePiece(i);}b.appendChild(cell);}}
+function renderTray(){const t=document.getElementById('pieceTray');t.innerHTML='';trayState.forEach((em,i)=>{if(!em){return;}const el=document.createElement('div');el.className='tray-piece';el.textContent=em;el.onclick=()=>{selectedPiece=i;document.querySelectorAll('.tray-piece').forEach(tp=>tp.style.borderColor='');el.style.borderColor='rgba(189,224,254,.6)';};t.appendChild(el);});}
+function placePiece(boardIdx){if(selectedPiece===null)return;const em=trayState[selectedPiece];if(!em)return;boardState[boardIdx]=em;trayState[selectedPiece]=null;selectedPiece=null;jMoves++;document.getElementById('jigMoves').textContent=`Moves: ${jMoves}`;renderBoard();renderTray();const p=puzzles[curPuzzle];if(boardState.every((em2,i)=>em2===p.emojis[i]))setTimeout(()=>document.getElementById('winMsg').classList.add('show'),400);}
+function newPuzzle(){initJigsaw();}
+
+/* ═══════════════════════════════
+   11. ZEN GARDEN
+═══════════════════════════════ */
+let zenCtx,zenCanvas2,zenTool='rake',zenStone='🪨',zenStones=[],zenLines=[],isZenDrawing=false,lastZenPt=null;
+const SAND_COLOR='#C8B090';
+function initZen(){zenCanvas2=document.getElementById('zenCanvas');if(!zenCanvas2||zenCanvas2._init)return;zenCanvas2._init=true;zenCtx=zenCanvas2.getContext('2d');const wrap=zenCanvas2.parentElement;const maxW=Math.min(wrap.offsetWidth-200,640);zenCanvas2.style.width=maxW+'px';zenCanvas2.style.height=Math.round(maxW*.656)+'px';drawZenBase();
+function getZPt(e){const r=zenCanvas2.getBoundingClientRect();const sx=zenCanvas2.width/r.width,sy=zenCanvas2.height/r.height;const src=e.touches?e.touches[0]:e;return{x:(src.clientX-r.left)*sx,y:(src.clientY-r.top)*sy};}
+zenCanvas2.addEventListener('mousedown',e=>{isZenDrawing=true;const p=getZPt(e);if(zenTool==='stone'){zenStones.push({x:p.x,y:p.y,em:zenStone});drawZenFull();}else if(zenTool==='erase'){zenStones=zenStones.filter(s=>Math.hypot(s.x-p.x,s.y-p.y)>35);drawZenFull();}else{lastZenPt=p;zenLines.push([p]);}});
+zenCanvas2.addEventListener('mousemove',e=>{if(!isZenDrawing)return;const p=getZPt(e);if(zenTool==='rake'&&lastZenPt){zenLines[zenLines.length-1].push(p);lastZenPt=p;drawZenFull();}});
+zenCanvas2.addEventListener('mouseup',()=>{isZenDrawing=false;lastZenPt=null;});
+zenCanvas2.addEventListener('touchstart',e=>{e.preventDefault();isZenDrawing=true;const p=getZPt(e);if(zenTool==='stone'){zenStones.push({x:p.x,y:p.y,em:zenStone});drawZenFull();}else{lastZenPt=p;zenLines.push([p]);}},{passive:false});
+zenCanvas2.addEventListener('touchmove',e=>{e.preventDefault();if(!isZenDrawing)return;const p=getZPt(e);if(zenTool==='rake'&&lastZenPt){zenLines[zenLines.length-1].push(p);lastZenPt=p;drawZenFull();}},{passive:false});
+zenCanvas2.addEventListener('touchend',()=>{isZenDrawing=false;lastZenPt=null;});}
+function drawZenBase(){const c=zenCtx,W=640,H=420;const sG=c.createLinearGradient(0,0,W,H);sG.addColorStop(0,'#D4B88A');sG.addColorStop(.4,'#C8A878');sG.addColorStop(.7,'#BEA070');sG.addColorStop(1,'#C4AA80');c.fillStyle=sG;c.fillRect(0,0,W,H);// Border
+c.strokeStyle='rgba(100,70,30,.45)';c.lineWidth=3;c.strokeRect(4,4,W-8,H-8);// Sand grain texture
+c.fillStyle='rgba(100,70,30,.04)';for(let i=0;i<800;i++){c.fillRect(Math.random()*W,Math.random()*H,1+Math.random()*2,1);}}
+function drawZenFull(){const c=zenCtx,W=640,H=420;drawZenBase();// Rake lines
+zenLines.forEach(line=>{if(line.length<2)return;[-8,-4,0,4,8].forEach(offset=>{c.beginPath();c.moveTo(line[0].x+offset,line[0].y);for(let i=1;i<line.length;i++)c.lineTo(line[i].x+offset,line[i].y);c.strokeStyle='rgba(90,60,20,.28)';c.lineWidth=1.2;c.lineCap='round';c.stroke();});});// Stones
+zenStones.forEach(s=>{c.font=`${38}px serif`;c.textAlign='center';c.textBaseline='middle';// Shadow
+c.fillStyle='rgba(0,0,0,.25)';c.fillText(s.em,s.x+3,s.y+4);c.fillStyle='rgba(0,0,0,0)';c.fillText(s.em,s.x,s.y);// Emoji
+c.shadowColor='transparent';c.fillStyle='black';c.fillText(s.em,s.x,s.y);});}
+function setZenTool(t,el){zenTool=t;document.querySelectorAll('.z-tool').forEach(b=>b.classList.remove('active'));el.classList.add('active');zenCanvas2.style.cursor=t==='stone'?'copy':t==='erase'?'no-drop':'crosshair';}
+function setStone(s,el){zenStone=s;document.querySelectorAll('.stone-opt').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+function clearZen(){zenStones=[];zenLines=[];drawZenBase();}
+
+// Show welcome on load
+showPage('welcome');
+</script>
+<a href="home.html">⬅Back to Home</a>
+</body>
+</html>

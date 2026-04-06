@@ -168,7 +168,7 @@ ul {
     
    <a href="cooking.html" onclick="openActivity('Cooking')">🍳 Cooking</a>
    <a href="gardening.html" onclick="openActivity('Gardening')">🌱 Gardening</a>
-    <a href="meditation" onclick="openActivity('Meditation')">🧘 Meditation</a>
+    <a href="meditation.html" onclick="openActivity('Meditation')">🧘 Meditation</a>
     <a href="games.html" onclick="openActivity('Games')">🎮 Playing Games</a>
     <a href="settings.html" onclick="openActivity('Settings')">⚙ Settings</a>
     
@@ -272,6 +272,9 @@ function openActivity(name) {
 
             else if (name === "Settings") {
         window.location.href = "settings.html";
+    }
+                else if (name === "Meditation") {
+        window.location.href = "meditation.html";
     }
 
 }
